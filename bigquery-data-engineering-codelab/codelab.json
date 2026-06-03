@@ -1,0 +1,26 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2026-06-01T11:36:50+05:30",
+  "id": "bigquery-data-engineering-codelab",
+  "duration": 0,
+  "title": "Codelab: Data Engineering - Preparing Data in BigQuery",
+  "summary": "Comprehensive guide to setting up, populating, and validating a Medallion layered architecture in BigQuery.",
+  "source": "bq_de_agent_markdown.md",
+  "theme": "",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "dataengineering",
+    "bigquery",
+    "googlecloud"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/your-repo/issues",
+  "url": "bigquery-data-engineering-codelab"
+}

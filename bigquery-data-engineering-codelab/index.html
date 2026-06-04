@@ -285,6 +285,81 @@ LEFT JOIN `endless-gasket-348709.sap_text.t077x` AS t
 
       </google-codelab-step>
     
+      <google-codelab-step label="7. Supplemental Guide: Production Dataform Framework &amp; Modules" duration="0">
+        <p>This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using Google Cloud Dataform.</p>
+<h2 is-upgraded>Part 1: The Production Framework (Standards &amp; Protocol)</h2>
+<p>All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors.</p>
+<h3 is-upgraded>Objective</h3>
+<p>Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform <code>.sqlx</code> files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the Medallion Architecture logic.</p>
+<h3 is-upgraded>Technical Pipeline Context</h3>
+<ul>
+<li><strong>Initial Source: </strong><code>endless-gasket-348709.input_layer.actual_sales</code></li>
+<li><strong>Target Dataset: </strong><code>final_layer</code></li>
+<li><strong>Master Data Source: </strong><code>endless-gasket-348709.sap_master</code></li>
+<li><strong>Text Data Source: </strong><code>endless-gasket-348709.sap_text</code></li>
+</ul>
+<h3 is-upgraded>Required Dataform Best Practices</h3>
+<ul>
+<li><strong>Config Block:</strong> Use <code>type: "table"</code>. Include the tag <code>["zinbobu_agent"]</code> and a comprehensive description field summarizing the job&#39;s business purpose.</li>
+<li><strong>Dependency Management:</strong> Exclusively use the <code>ref()</code> function to establish the transformation chain: <code>Job 1 -> Job 2 -> Job 3 -> Job 4</code>.</li>
+<li><strong>Auditability:</strong> Every transformation and rename must be explained with inline SQL comments.</li>
+<li><strong>Data Quality:</strong> Include an assertions block in relevant scripts to check for null values in primary key columns or row uniqueness.</li>
+</ul>
+<h3 is-upgraded>CRITICAL EXECUTION PROTOCOL</h3>
+<ol type="1">
+<li><strong>Modular Execution:</strong> You are to generate code for one Job at a time only.</li>
+<li><strong>Pause &amp; Wait:</strong> After completing the requested Job, you must explicitly ask the user for the instruction for the next module.</li>
+<li><strong>No Leapfrogging:</strong> Do not generate logic for future Jobs (e.g., joins or renames) until that specific Job is explicitly requested.</li>
+</ol>
+<h2 is-upgraded>Part 2: Module-Wise Specifications</h2>
+<p>Use these specific prompt blueprints to guide the module generation process step-by-step.</p>
+<h3 is-upgraded>Module 1: Raw Ingestion (Job 1)</h3>
+<ul>
+<li><strong>Instruction:</strong> Based on the common requirements provided, create the first module: <code>actual_sales_step1.sqlx</code>.</li>
+<li><strong>Task:</strong> Select all columns and rows from the <code>actual_sales</code> source table.</li>
+<li><strong>Formatting:</strong> Ensure the config block includes a description identifying this as the &#34;Bronze/Raw Ingestion Layer&#34;.</li>
+</ul>
+<h3 is-upgraded>Module 2: Standardization &amp; Schema Cleaning (Job 2)</h3>
+<ul>
+<li><strong>Instruction:</strong> Based on the common requirements, create <code>actual_sales_step2.sqlx</code>.</li>
+<li><strong>Dependency:</strong> This script must reference <code>actual_sales_step1</code>.</li>
+<li><strong>Task:</strong> Clean technical prefixes from all column names. Specifically, strip <code>_bic_</code>, <code>bic_</code>, or a leading <code>_</code> (e.g., <code>_bic_bill_date</code> becomes <code>bill_date</code>).</li>
+<li><strong>Audit Requirement:</strong> For every renamed column, add an inline SQL comment <code>-- Renamed from [Original Name]</code>.</li>
+</ul>
+<h3 is-upgraded>Module 3: Master Data Enrichment (Job 3)</h3>
+<ul>
+<li><strong>Instruction:</strong> Based on the common requirements, create <code>actual_sales_step3.sqlx</code>.</li>
+<li><strong>Dependency:</strong> Reference <code>actual_sales_step2</code>.</li>
+<li><strong>Join Logic (Material): </strong><code>LEFT JOIN</code> with <code>MaterialMD</code>. Select <code>MaterialType</code>, <code>MaterialGroup</code>, <code>Product_ZPRODUCTC</code>, and <code>BrandName_CBRANDNME_T</code>.</li>
+<li><strong>Join Logic (Plant): </strong><code>LEFT JOIN</code> with <code>PlantMD</code>. Select <code>MillR_GRMILL</code>, <code>Plant_PLANT</code>, and <code>PlantType_ZPLNTTYP</code>.</li>
+<li><strong>Standards:</strong> Filter both joins by <code>LanguageKey = 'E'</code> to prevent duplicate records.</li>
+</ul>
+<h3 is-upgraded>Module 4: Human-Readable Text Enrichment (Job 4)</h3>
+<ul>
+<li><strong>Instruction:</strong> Based on the common requirements, create the final module: <code>actual_sales_step4.sqlx</code>.</li>
+<li><strong>Dependency:</strong> Reference <code>actual_sales_step3</code>.</li>
+<li><strong>Enrichment Task:</strong> Join with text tables <code>kna1</code>, <code>but000</code>, and <code>t077x</code>.</li>
+<li><strong>Text Standards:</strong> Filter by Language (<code>'E'</code>) and SAP Client (<code>'012'</code>).</li>
+<li><strong>Selection:</strong> Retrieve <code>NAME1</code> from <code>kna1</code>, <code>TXT30</code> from <code>t077x</code>, and text fields from <code>but000</code>. Use unique table aliases for each join.</li>
+</ul>
+<h3 is-upgraded>Module 5: Customer Master Data Enrichment Expansion</h3>
+<ul>
+<li><strong>Instruction:</strong> Based on the common requirements, enhance <code>actual_sales_step3.sqlx</code>.</li>
+<li><strong>Dependency:</strong> Reference <code>actual_sales_step2</code>.</li>
+<li><strong>Join Logic (CustomerMD): </strong><code>LEFT JOIN</code> with <code>CustomerMD</code>. Identify the relevant joining keys and fetch the relevant fields from <code>CustomerMD</code>.</li>
+<li><strong>Standards:</strong> Filter both joins by <code>LanguageKey = 'E'</code> to prevent duplicate records.</li>
+</ul>
+<h3 is-upgraded>Module 6: Master Data Enrichment - Correction</h3>
+<ul>
+<li><strong>Instruction:</strong> Based on the common requirements, enhance <code>actual_sales_step3.sqlx</code>.</li>
+<li><strong>Dependency:</strong> Reference <code>actual_sales_step2</code>.</li>
+<li><strong>Correction Requirement:</strong> A correction is needed for the script <code>actual_sales_step3.sqlx</code>. Do not rename the master table columns; keep them exactly as they are defined in the schema.</li>
+<li><strong>Standards:</strong> Filter both joins by <code>LanguageKey = 'E'</code> to prevent duplicate records.</li>
+</ul>
+
+
+      </google-codelab-step>
+    
   </google-codelab>
 
   <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>

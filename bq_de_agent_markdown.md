@@ -250,3 +250,74 @@ LEFT JOIN `endless-gasket-348709.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = '012' AND t.SPRAS = 'E';
 ```
 
+
+
+---
+
+## 7. Supplemental Guide: Production Dataform Framework & Modules
+This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using Google Cloud Dataform. 
+
+### Part 1: The Production Framework (Standards & Protocol)
+All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors.
+
+#### Objective
+Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform `.sqlx` files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the Medallion Architecture logic.
+
+#### Technical Pipeline Context
+* **Initial Source:** `endless-gasket-348709.input_layer.actual_sales`
+* **Target Dataset:** `final_layer`
+* **Master Data Source:** `endless-gasket-348709.sap_master`
+* **Text Data Source:** `endless-gasket-348709.sap_text`
+
+#### Required Dataform Best Practices
+* **Config Block:** Use `type: "table"`. Include the tag `["zinbobu_agent"]` and a comprehensive description field summarizing the job's business purpose.
+* **Dependency Management:** Exclusively use the `ref()` function to establish the transformation chain: `Job 1 -> Job 2 -> Job 3 -> Job 4`.
+* **Auditability:** Every transformation and rename must be explained with inline SQL comments.
+* **Data Quality:** Include an assertions block in relevant scripts to check for null values in primary key columns or row uniqueness.
+
+#### CRITICAL EXECUTION PROTOCOL
+1.  **Modular Execution:** You are to generate code for one Job at a time only.
+2.  **Pause & Wait:** After completing the requested Job, you must explicitly ask the user for the instruction for the next module.
+3.  **No Leapfrogging:** Do not generate logic for future Jobs (e.g., joins or renames) until that specific Job is explicitly requested.
+
+---
+
+### Part 2: Module-Wise Specifications
+Use these specific prompt blueprints to guide the module generation process step-by-step.
+
+#### Module 1: Raw Ingestion (Job 1)
+* **Instruction:** Based on the common requirements provided, create the first module: `actual_sales_step1.sqlx`.
+* **Task:** Select all columns and rows from the `actual_sales` source table.
+* **Formatting:** Ensure the config block includes a description identifying this as the "Bronze/Raw Ingestion Layer".
+
+#### Module 2: Standardization & Schema Cleaning (Job 2)
+* **Instruction:** Based on the common requirements, create `actual_sales_step2.sqlx`.
+* **Dependency:** This script must reference `actual_sales_step1`.
+* **Task:** Clean technical prefixes from all column names. Specifically, strip `_bic_`, `bic_`, or a leading `_` (e.g., `_bic_bill_date` becomes `bill_date`).
+* **Audit Requirement:** For every renamed column, add an inline SQL comment `-- Renamed from [Original Name]`.
+
+#### Module 3: Master Data Enrichment (Job 3)
+* **Instruction:** Based on the common requirements, create `actual_sales_step3.sqlx`.
+* **Dependency:** Reference `actual_sales_step2`.
+* **Join Logic (Material):** `LEFT JOIN` with `MaterialMD`. Select `MaterialType`, `MaterialGroup`, `Product_ZPRODUCTC`, and `BrandName_CBRANDNME_T`.
+* **Join Logic (Plant):** `LEFT JOIN` with `PlantMD`. Select `MillR_GRMILL`, `Plant_PLANT`, and `PlantType_ZPLNTTYP`.
+* **Standards:** Filter both joins by `LanguageKey = 'E'` to prevent duplicate records.
+
+#### Module 4: Human-Readable Text Enrichment (Job 4)
+* **Instruction:** Based on the common requirements, create the final module: `actual_sales_step4.sqlx`.
+* **Dependency:** Reference `actual_sales_step3`.
+* **Enrichment Task:** Join with text tables `kna1`, `but000`, and `t077x`.
+* **Text Standards:** Filter by Language (`'E'`) and SAP Client (`'012'`).
+* **Selection:** Retrieve `NAME1` from `kna1`, `TXT30` from `t077x`, and text fields from `but000`. Use unique table aliases for each join.
+
+#### Module 5: Customer Master Data Enrichment Expansion
+* **Instruction:** Based on the common requirements, enhance `actual_sales_step3.sqlx`.
+* **Dependency:** Reference `actual_sales_step2`.
+* **Join Logic (CustomerMD):** `LEFT JOIN` with `CustomerMD`. Identify the relevant joining keys and fetch the relevant fields from `CustomerMD`.
+* **Standards:** Filter both joins by `LanguageKey = 'E'` to prevent duplicate records.
+
+#### Module 6: Master Data Enrichment - Correction
+* **Instruction:** Based on the common requirements, enhance `actual_sales_step3.sqlx`.
+* **Dependency:** Reference `actual_sales_step2`.
+* **Correction Requirement:** A correction is needed for the script `actual_sales_step3.sqlx`. Do not rename the master table columns; keep them exactly as they are defined in the schema.
+* **Standards:** Filter both joins by `LanguageKey = 'E'` to prevent duplicate records.

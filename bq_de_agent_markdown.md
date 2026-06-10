@@ -260,64 +260,213 @@ This section outlines the governance framework and specific script configuration
 ### Part 1: The Production Framework (Standards & Protocol)
 All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors.
 
-#### Objective
-Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform `.sqlx` files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the Medallion Architecture logic.
+### Step 1: Open BigQuery in GCP Console
+Navigate to the Google Cloud Console, select your project (`demo-pep`), and open the BigQuery console from the navigation menu.
+In the BigQuery explorer sidebar, look for the **Pipelines** dropdown menu. Click the three dots (options menu) next to Pipelines and select **Create pipeline**.
 
-#### Technical Pipeline Context
-* **Initial Source:** `endless-gasket-348709.input_layer.actual_sales`
-* **Target Dataset:** `final_layer`
-* **Master Data Source:** `endless-gasket-348709.sap_master`
-* **Text Data Source:** `endless-gasket-348709.sap_text`
+<img src="img/ss1.png" alt="GCP BigQuery Navigation" width="400">
 
-#### Required Dataform Best Practices
-* **Config Block:** Use `type: "table"`. Include the tag `["zinbobu_agent"]` and a comprehensive description field summarizing the job's business purpose.
-* **Dependency Management:** Exclusively use the `ref()` function to establish the transformation chain: `Job 1 -> Job 2 -> Job 3 -> Job 4`.
-* **Auditability:** Every transformation and rename must be explained with inline SQL comments.
-* **Data Quality:** Include an assertions block in relevant scripts to check for null values in primary key columns or row uniqueness.
+### Step 2: Rename Pipline and Start Agent
+Rename the pipeline from **Untitled pipeline** to you desired name like **DE_Agent_Pipeline**. Click on `Ask Agent` in the top menu.
 
-#### CRITICAL EXECUTION PROTOCOL
-1.  **Modular Execution:** You are to generate code for one Job at a time only.
-2.  **Pause & Wait:** After completing the requested Job, you must explicitly ask the user for the instruction for the next module.
-3.  **No Leapfrogging:** Do not generate logic for future Jobs (e.g., joins or renames) until that specific Job is explicitly requested.
+<img src="img/ss2.png" alt="Create Pipeline Context Menu" width="400">
+
+It will open a popup at the bottom, there click the `Pipeline instructions` and it will open a new window with `GEMINI.md` file name.
+Now copy the below content to the file and save it
+```
+Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the "Medallion Architecture" logic .
+Technical Context:
+Initial Source: endless-gasket-348709.input_layer.actual_sales
+Target Dataset: final_layer
+Master Data Source: endless-gasket-348709.sap_master
+Text Data Source: endless-gasket-348709.sap_text
+Dataform Best Practices (Required for ALL scripts):
+Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's business purpose.
+Dependency Management: Exclusively use the ref() function to establish the transformation chain: Job 1 -> Job 2 -> Job 3 -> Job 4.
+Auditability: Every transformation and rename must be explained with inline SQL comments.
+Data Quality: Include an assertions block in relevant scripts to check for null values in primary key columns or row uniqueness.
+CRITICAL EXECUTION PROTOCOL:
+Modular Execution: You are to generate code for one Job at a time only .
+Pause & Wait: After completing the requested Job, you must explicitly ask me for the instruction for the next module 
+No Leapfrogging: Do not generate logic for future Jobs (e.g., joins or renames) until that specific Job is requested 
+```
+
+Now, push the changes to the code repo. the screen looks like below:
+
+<img src="img/ss_gemini.png" alt="instructions file" width="400">
+
+Then get back to previous window, and now you will see `one instruction file added`, then click save.
+
+<img src="img/ss_agent_instructions.png" alt="agent instructions" width="400">
 
 ---
 
-### Part 2: Module-Wise Specifications
-Use these specific prompt blueprints to guide the module generation process step-by-step.
+## 8. Module-Wise Demo Prompts
+Once the common prompt is set, use these specific instructions to generate each module for your demo 
 
-#### Module 1: Raw Ingestion (Job 1)
-* **Instruction:** Based on the common requirements provided, create the first module: `actual_sales_step1.sqlx`.
-* **Task:** Select all columns and rows from the `actual_sales` source table.
-* **Formatting:** Ensure the config block includes a description identifying this as the "Bronze/Raw Ingestion Layer".
 
-#### Module 2: Standardization & Schema Cleaning (Job 2)
-* **Instruction:** Based on the common requirements, create `actual_sales_step2.sqlx`.
-* **Dependency:** This script must reference `actual_sales_step1`.
-* **Task:** Clean technical prefixes from all column names. Specifically, strip `_bic_`, `bic_`, or a leading `_` (e.g., `_bic_bill_date` becomes `bill_date`).
-* **Audit Requirement:** For every renamed column, add an inline SQL comment `-- Renamed from [Original Name]`.
+### Step 1: Module 1
+In the pipeline canvas, Go to Ask Agent popup and provide the below Module 1 prompt
 
-#### Module 3: Master Data Enrichment (Job 3)
-* **Instruction:** Based on the common requirements, create `actual_sales_step3.sqlx`.
-* **Dependency:** Reference `actual_sales_step2`.
-* **Join Logic (Material):** `LEFT JOIN` with `MaterialMD`. Select `MaterialType`, `MaterialGroup`, `Product_ZPRODUCTC`, and `BrandName_CBRANDNME_T`.
-* **Join Logic (Plant):** `LEFT JOIN` with `PlantMD`. Select `MillR_GRMILL`, `Plant_PLANT`, and `PlantType_ZPLNTTYP`.
-* **Standards:** Filter both joins by `LanguageKey = 'E'` to prevent duplicate records.
+```
+Module 1: Raw Ingestion (Job 1)
+Instruction: Based on the common requirements provided, create the first module: actual_sales_step1.sqlx.
+Task: Select all columns and rows from the actual_sales source table.
+Formatting: Ensure the config block includes a description identifying this as the "Bronze/Raw Ingestion Layer".
+```
 
-#### Module 4: Human-Readable Text Enrichment (Job 4)
-* **Instruction:** Based on the common requirements, create the final module: `actual_sales_step4.sqlx`.
-* **Dependency:** Reference `actual_sales_step3`.
-* **Enrichment Task:** Join with text tables `kna1`, `but000`, and `t077x`.
-* **Text Standards:** Filter by Language (`'E'`) and SAP Client (`'012'`).
-* **Selection:** Retrieve `NAME1` from `kna1`, `TXT30` from `t077x`, and text fields from `but000`. Use unique table aliases for each join.
+Now the agent will generate the pipeline as below:
 
-#### Module 5: Customer Master Data Enrichment Expansion
-* **Instruction:** Based on the common requirements, enhance `actual_sales_step3.sqlx`.
-* **Dependency:** Reference `actual_sales_step2`.
-* **Join Logic (CustomerMD):** `LEFT JOIN` with `CustomerMD`. Identify the relevant joining keys and fetch the relevant fields from `CustomerMD`.
-* **Standards:** Filter both joins by `LanguageKey = 'E'` to prevent duplicate records.
+<img src="img/ss5.png" alt="Module 1" width="400">
 
-#### Module 6: Master Data Enrichment - Correction
-* **Instruction:** Based on the common requirements, enhance `actual_sales_step3.sqlx`.
-* **Dependency:** Reference `actual_sales_step2`.
-* **Correction Requirement:** A correction is needed for the script `actual_sales_step3.sqlx`. Do not rename the master table columns; keep them exactly as they are defined in the schema.
-* **Standards:** Filter both joins by `LanguageKey = 'E'` to prevent duplicate records.
+### Step 2: Module 2
+Provide the below Module 2 prompt
+
+```
+Module 2: Standardization & Schema Cleaning (Job 2)
+Instruction: Based on the common requirements, create actual_sales_step2.sqlx.
+Dependency: This script must reference actual_sales_step1.
+Task: Clean technical prefixes from all column names. Specifically, strip _bic_, bic_, or a leading _ (e.g., _bic_bill_date becomes bill_date).
+Audit Requirement: For every renamed column, add an inline SQL comment -- Renamed from [Original Name].
+```
+
+Now the agent will generate the pipeline as below:
+
+<img src="img/ss6.png" alt="Module 1" width="400">
+
+### Step 3: Module 3
+Provide the below Module 3 prompt
+
+```
+Module 3: Master Data Enrichment (Job 3)
+Instruction: Based on the common requirements, create actual_sales_step3.sqlx.
+Dependency: Reference actual_sales_step2.
+Join Logic (Material): LEFT JOIN with MaterialMD. Select MaterialType, MaterialGroup, Product_ZPRODUCTC, and BrandName_CBRANDNME_T.
+Join Logic (Plant): LEFT JOIN with PlantMD. Select MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
+Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
+```
+
+Now the agent will generate the pipeline as below:
+
+<img src="img/ss7.png" alt="Module 1" width="400">
+
+### Step 4: Module 4
+Provide the below Module 4 prompt
+
+```
+Module 4: Human-Readable Text Enrichment (Job 4)
+Instruction: Based on the common requirements, create the final module: actual_sales_step4.sqlx.
+Dependency: Reference actual_sales_step3.
+Enrichment Task: Join with text tables kna1, but000, and t077x.
+Text Standards: Filter by Language ('E') and SAP Client ('012').
+Selection: Retrieve NAME1 from kna1 and TXT30 from t077x and text fields from but000. Use unique table aliases for each join.
+```
+
+Now the agent will generate the pipeline as below:
+
+<img src="img/ss8.png" alt="Module 1" width="400">
+
+### Step 5: Module 5
+Provide the below Module 5 prompt
+
+```
+Module 5: Master Data Enrichment 
+Instruction: Based on the common requirements, enhance actual_sales_step3.sqlx.
+Dependency: Reference actual_sales_step2.
+Join Logic (CustomerMD): LEFT JOIN with CustomerMD.identify the relevant joining keys and fetch the relevant fields from CustomerMD
+Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
+```
+
+Now the agent will generate the pipeline as below:
+
+<img src="img/ss9.png" alt="Module 1" width="400">
+
+### Step 6: Module 6
+Provide the below Module 6 prompt
+
+```
+Module 6: Master Data Enrichment - correction
+Instruction: Based on the common requirements, enhance actual_sales_step3.sqlx.
+Dependency: Reference actual_sales_step2.
+I need a correction to the script actual_sales_step3.sqlx.
+Do not rename the master table columns, keep it as it is .
+Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
+```
+
+Now the agent will generate the pipeline as below:
+
+<img src="img/ss10.png" alt="Module 1" width="400">
+
+---
+## 9. Additional Content
+Below ones are yet to be tuned correctly, but can train the same output from agent with these single and informal prompt too.
+
+### Single Prompt
+```
+Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the "Medallion Architecture" logic.
+Technical Context:
+Initial Source: endless-gasket-348709.input_layer.actual_sales
+Target Dataset: final_layer
+Master table Sources: endless-gasket-348709.sap_master and endless-gasket-348709.sap_text
+Text table  Sources: endless-gasket-348709.sap_master and endless-gasket-348709.sap_text
+Dataform Best Practices Requirements for ALL Scripts:
+Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's purpose.
+Dependency Management: Exclusively use the ref() function to establish the chain: Job 1 -> Job 2 -> Job 3 -> Job 4.
+Auditability: Every transformation must be explained with inline SQL comments.
+Data Quality: Include an assertions block in relevant scripts to check for null values in primary key columns or uniqueness.
+Job-Specific Logic:
+Job 1 (Ingestion Layer): Create actual_sales_step1.sqlx.
+Task: Materialize a 1:1 copy of the source actual_sales_.
+Documentation: Tag this as the "Raw Ingestion Layer" in the config.
+Job 2 (Standardization Layer): Create actual_sales_step2.sqlx.
+Transformation: Standardize the schema by cleaning column names. Strip prefixes like _bic_, bic_, or leading underscores.
+Rule: For every renaming, add the comment -- AUDIT: Renamed from [Original Name] next to the field.
+Assertion: Check that the resulting bill_date (or equivalent) is never null.
+Job 3 (Master Data Enrichment): Create actual_sales_step3.sqlx.
+Join Logic: Perform LEFT JOIN operations with MaterialMD and PlantMD.
+Standard master table filters: Apply a WHERE clause for LanguageKey = 'E' for both master tables to prevent row explosion.
+Material Selection: Fetch MaterialType, MaterialGroup, Product_ZPRODUCTC, and BrandName_CBRANDNME_T.
+Plant Selection: Fetch MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
+
+
+Job 4 (Text Table Enrichment - Final Layer): Create actual_sales_step4.sqlx.
+Task: Join with kna1, but000, and t077x.
+Standards: Filter by Language ('E') and Client ('012').
+Select: Retrieve NAME1 from kna1 and TXT30 from t077x. Use unique aliases like customer_text and category_description.
+Performance: Add bigquery: { partitionBy: "CLEAN_DATE_FIELD" } to the config block if a date field is available.
+Output Format: Provide distinct code blocks. Clearly label each with its intended filename (e.g., actual_sales_step1.sqlx). 
+Think through the logic step-by-step to ensure column name collisions are avoided.
+```
+
+### Informal Prompt
+
+```
+Act as a Lead GCP Data Engineer.Develop a dataform BigQuery script to  modernize SAP BW tables to BQ as per the below steps.Provide code comments for better code readability.
+Step 1: SAP BW table zbqzinvb is available in endless-gasket-348709.input_layer.actual_sales_.
+Copy the table actual_sales_ to actual_sales_step1 in final_layer dataset.
+Step2 :Copy the table actual_sales_step1 to actual_sales_step2 in final_layer dataset with below transformation.
+ if the table actual_sales_step2 has any SAP technical prefixes like _bic_, bic_, or a leading _, it strips them.example - a column originally named _bic_bill_date is renamed to bill_date directly in the source dataset.
+Step2a-highlight the fields which are renamed
+Step4 : add tag zinbobu_agent to all the scripts
+Step5 : Master Data Enrichment
+
+In step5, let us enhance actual_sales_step2 by joining with master data tables which are available in endless-gasket-348709.sap_master
+Step 5.1 : Write a BigQuery SQL join to enrich the actual_sales_step2 table with the MaterialMD master table. Perform a LEFT JOIN where zinbobu.material matches MaterialMD.Material_MATERIAL. Crucially, apply a filter for LanguageKey = 'E' to prevent row duplication. Fetch high-level product hierarchy columns including MaterialType, MaterialGroup, Product_ZPRODUCTC, and the corresponding text description BrandName_CBRANDNME_T.
+
+Step 5.2
+Generate a SQL snippet to join actual_sales_step5_1 with the PlantMD master table. The join should be a LEFT JOIN on the PLANT field. Ensure the master data is filtered by LanguageKey = 'E'. Retrieve key mill-specific attributes: MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP . This join should provide the geographic and operational context for the manufacturing source of the transaction.
+
+Step6: Text table enrichment
+In step6, let us enhance actual_sales_step5_2
+ by joining with text  data tables which are available in endless-gasket-348709.sap_text and  retrieve the descriptive text field 
+
+
+Text Table Standards:
+Filter every text table joined by Language (SPRAS = 'E', langu = 'E', or ddlanguage = 'E').
+Filter every SAP ECC table by Client (MANDT = '012' or CLIENT = '012').
+Ensure unique aliasing for repeated tables (e.g., kna1_1, kna1_2, tbrct_1, etc.).
+Focus on below Table Joins to Include:
+Customer/Party: kna1, but000, t077x.
+For KNA1 joins: Retrieve NAME1 
+For T077X joins: Retrieve TXT30.
+```

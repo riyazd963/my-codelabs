@@ -29,21 +29,29 @@
                   feedback-link="https://github.com/your-repo/issues">
     
       <google-codelab-step label="Overview" duration="0">
-        <p>In this codelab, you will learn how to set up and prepare a data pipeline architecture in Google Cloud BigQuery using a Medallion (layered) data approach. We will walk through cleaning up existing environments, establishing rigorous relational schemas across multiple staging layers, generating programmatic mock data, and writing key validation tests.</p>
+        <p>Welcome to this comprehensive course on Data Engineering in Google Cloud BigQuery! In this module, you will learn how to design, set up, and validate a robust data pipeline architecture using the highly regarded <strong>Medallion (layered) data approach</strong>.</p>
+<p>The Medallion architecture organizes data into distinct layers—typically Bronze (raw), Silver (cleansed and conformed), and Gold (business-level aggregates)—ensuring data quality and logical separation of concerns. Throughout this codelab, we will guide you step-by-step through:</p>
+<ol type="1">
+<li>Safely cleaning up existing environments to ensure a pristine deployment.</li>
+<li>Establishing rigorous relational schemas across multiple staging layers.</li>
+<li>Generating programmatic mock data to simulate real-world SAP systems.</li>
+<li>Writing key validation and integrity tests to guarantee data quality.</li>
+</ol>
 <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
 <ul class="checklist">
-<li>How to structure datasets for a layered data architecture.</li>
-<li>Cleaning up previous database states safely.</li>
-<li>Defining robust BigQuery table schemas (Source, Target, Master Data, Text Enrichment).</li>
-<li>Implementing automated mock data generation directly via standard SQL.</li>
-<li>Authoring integrity checking queries to trace missing joining keys across complex data boundaries.</li>
+<li><strong>Architectural Best Practices</strong>: How to structure BigQuery datasets for a scalable layered data architecture.</li>
+<li><strong>State Management</strong>: Best practices for cleaning up previous database states safely and idempotently.</li>
+<li><strong>Schema Design</strong>: Defining robust BigQuery table schemas for Transactional Sources, Targets, Master Data, and Text Enrichment.</li>
+<li><strong>Data Simulation</strong>: Implementing automated mock data generation directly via standard SQL to facilitate testing.</li>
+<li><strong>Data Quality Engineering</strong>: Authoring integrity-checking queries to trace missing joining keys and validate complex data boundaries.</li>
 </ul>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Environment Architecture Overview" duration="0">
-        <p>Before executing queries, it is essential to understand the organization of your datasets and tables within the project. The data environment is structured as follows:</p>
+        <p>Before we begin writing any code, it is critical to understand the layout of our datasets and tables. A well-organized environment prevents confusion and enforces data governance.</p>
+<p>Our data environment is structured into specific layers and domains as follows:</p>
 <table>
 <tr><td colspan="1" rowspan="1"><p>Layer / Purpose</p>
 </td><td colspan="1" rowspan="1"><p>Project ID</p>
@@ -51,42 +59,44 @@
 </td><td colspan="1" rowspan="1"><p>Table Name</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Source (Raw SAP)</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your GCP ProjectID</code></p>
+</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>input_layer</code></p>
 </td><td colspan="1" rowspan="1"><p><code>actual_sales</code></p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Target (Medallion)</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your GCP ProjectID</code></p>
+</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>final_layer</code></p>
 </td><td colspan="1" rowspan="1"><p><code>actual_sales_step1</code> through <code>step4</code></p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Master Data</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your GCP ProjectID</code></p>
+</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>sap_master</code></p>
 </td><td colspan="1" rowspan="1"><p><code>MaterialMD</code>, <code>PlantMD</code>, <code>CustomerMD</code></p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Text Enrichment</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your GCP ProjectID</code></p>
+</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>sap_text</code></p>
 </td><td colspan="1" rowspan="1"><p><code>kna1</code>, <code>but000</code>, <code>t077x</code></p>
 </td></tr>
 </table>
+<p>Take a moment to familiarize yourself with these datasets. The <code>input_layer</code> acts as our Bronze layer, capturing raw data, while the <code>final_layer</code> will serve as our refined Silver/Gold layers.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Step 1: Environment Cleanup" duration="0">
-        <p>To ensure a clean deployment and avoid conflicts with old schema versions, we start by dropping any existing tables.</p>
-<p>Run the following standard BigQuery SQL commands in your workspace[cite: 1]:</p>
-<pre><code language="language-sql" class="language-sql">-- 1. CLEANUP
+        <p>In data engineering, idempotency—the ability to run a script multiple times and achieve the same result—is a core principle. To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.</p>
+<p>By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.</p>
+<p>Run the following standard BigQuery SQL commands in your workspace:</p>
+<pre><code language="language-sql" class="language-sql">-- 1. CLEANUP: Resetting the environment to a pristine state
 -----------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS `Your GCP ProjectID.input_layer.actual_sales`;
-DROP TABLE IF EXISTS `Your GCP ProjectID.sap_master.MaterialMD`;
-DROP TABLE IF EXISTS `Your GCP ProjectID.sap_master.CustomerMD`;
-DROP TABLE IF EXISTS `Your GCP ProjectID.sap_master.PlantMD`;
-DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.kna1`;
-DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.but000`;
-DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.t077x`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.input_layer.actual_sales`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_master.MaterialMD`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_master.CustomerMD`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_master.PlantMD`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.kna1`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.but000`;
+DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 </code></pre>
 
@@ -94,13 +104,14 @@ DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.t077x`;
       </google-codelab-step>
     
       <google-codelab-step label="Step 2: Create DDL Schemas" duration="0">
-        <p>Now that the environment is clear, your next phase involves defining the structural properties for each layer. Each master schema handles specific data grain domains.</p>
-<p>Execute these DDL statements to construct the empty database structures:</p>
-<pre><code language="language-sql" class="language-sql">-- 2. CREATE TABLES (25+ COLUMNS EACH)
+        <p>With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables.</p>
+<p>Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).</p>
+<p>Execute these DDL statements to construct your database structures:</p>
+<pre><code language="language-sql" class="language-sql">-- 2. CREATE TABLES: Defining schemas with 25+ attributes each
 -----------------------------------------------------------------------------------------
 
 -- MATERIAL MASTER DATA
-CREATE TABLE `Your GCP ProjectID.sap_master.MaterialMD` (
+CREATE TABLE `Your_GCP_ProjectID.sap_master.MaterialMD` (
   Material_MATERIAL STRING, LanguageKey STRING, Material_MATERIAL_T STRING, MaterialType_MATL_TYPE STRING, MaterialGroup_MATL_GROUP STRING,
   BaseUnit STRING, GrossWeight NUMERIC, NetWeight NUMERIC, WeightUnit STRING, Volume NUMERIC, VolumeUnit STRING, IndustrySector STRING,
   CreatedBy STRING, CreatedOn DATE, ChangedBy STRING, LastChangedOn DATE, Division STRING, ProductHierarchy STRING, Brand STRING,
@@ -108,7 +119,7 @@ CREATE TABLE `Your GCP ProjectID.sap_master.MaterialMD` (
 );
 
 -- CUSTOMER MASTER DATA
-CREATE TABLE `Your GCP ProjectID.sap_master.CustomerMD` (
+CREATE TABLE `Your_GCP_ProjectID.sap_master.CustomerMD` (
   Client_MANDT STRING, CustomerNumber_KUNNR STRING, Name1_NAME1 STRING, Name2_NAME2 STRING, CountryKey_LAND1 STRING,
   City_ORT01 STRING, PostalCode_PSTLZ STRING, Region_REGIO STRING, Street_STRAS STRING, Phone_TELF1 STRING, Fax_TELFX STRING,
   AccountGroup_KTOKD STRING, Industry_BRSCH STRING, CreatedOn_ERDAT DATE, CreatedBy_ERNAM STRING, DeletionFlag_LOEVM STRING,
@@ -117,7 +128,7 @@ CREATE TABLE `Your GCP ProjectID.sap_master.CustomerMD` (
 );
 
 -- PLANT MASTER DATA
-CREATE TABLE `Your GCP ProjectID.sap_master.PlantMD` (
+CREATE TABLE `Your_GCP_ProjectID.sap_master.PlantMD` (
   Plant_PLANT STRING, LanguageKey STRING, Plant_PLANT_T STRING, FactoryCalendar STRING, Name2 STRING, HouseNum STRING,
   Street STRING, PoBox STRING, PostalCode STRING, City STRING, Country STRING, Region STRING, TaxJurisdiction STRING,
   PurchasingOrg STRING, SalesOrg STRING, DistChannel STRING, Division STRING, Category STRING, BatchMgmt STRING,
@@ -125,27 +136,27 @@ CREATE TABLE `Your GCP ProjectID.sap_master.PlantMD` (
 );
 
 -- TEXT ENRICHMENT TABLES
-CREATE TABLE `Your GCP ProjectID.sap_text.kna1` (
+CREATE TABLE `Your_GCP_ProjectID.sap_text.kna1` (
   MANDT STRING, KUNNR STRING, NAME1 STRING, LAND1 STRING, ORT01 STRING, PSTLZ STRING, REGIO STRING, STRAS STRING, TELF1 STRING, TELFX STRING,
   KTOKD STRING, BRSCH STRING, ERDAT DATE, ERNAM STRING, LOEVM STRING, STCD1 STRING, STCD2 STRING, SPRAS STRING, VBUND STRING, STCEG STRING,
   NIELS STRING, ORT02 STRING, KUKLA STRING, BEGRU STRING, ADRNR STRING
 );
 
-CREATE TABLE `Your GCP ProjectID.sap_text.but000` (
+CREATE TABLE `Your_GCP_ProjectID.sap_text.but000` (
   CLIENT STRING, PARTNER STRING, TYPE STRING, BP_CATEGORY STRING, BP_GROUP STRING, NAME_ORG1 STRING, NAME_ORG2 STRING,
   NAME_LAST STRING, NAME_FIRST STRING, TITLE STRING, LANGU STRING, SEARCHTERM1 STRING, SEARCHTERM2 STRING,
   BIRTH_DATE DATE, VALID_FROM DATE, VALID_TO DATE, NATION STRING, HOUSE_NUM STRING, STREET STRING, CITY STRING,
   POSTAL_CODE STRING, COUNTRY STRING, REGION STRING, TEL_NUMBER STRING, SMTP_ADDR STRING
 );
 
-CREATE TABLE `Your GCP ProjectID.sap_text.t077x` (
+CREATE TABLE `Your_GCP_ProjectID.sap_text.t077x` (
   MANDT STRING, SPRAS STRING, KTOKD STRING, TXT30 STRING, TXT15 STRING,
   F1 STRING, F2 STRING, F3 STRING, F4 STRING, F5 STRING, F6 STRING, F7 STRING, F8 STRING, F9 STRING, F10 STRING,
   F11 STRING, F12 STRING, F13 STRING, F14 STRING, F15 STRING, F16 STRING, F17 STRING, F18 STRING, F19 STRING, F20 STRING, F21 STRING
 );
 
 -- TRANSACTIONAL INPUT LAYER
-CREATE TABLE `Your GCP ProjectID.input_layer.actual_sales` (
+CREATE TABLE `Your_GCP_ProjectID.input_layer.actual_sales` (
   record INT64, doc_number STRING, material STRING, sold_to STRING, plant STRING, cust_class STRING, calday DATE,
   _bic_bill_date DATE, bic_inv_bkd NUMERIC, _s_ord_item STRING, _bic_bill_item STRING, doc_currcy STRING,
   fiscper STRING, fiscyear STRING, salesorg STRING, distr_chan STRING, division STRING,
@@ -159,42 +170,43 @@ CREATE TABLE `Your GCP ProjectID.input_layer.actual_sales` (
       </google-codelab-step>
     
       <google-codelab-step label="Step 3: Populate Mock Data" duration="0">
-        <p>To facilitate automated testing pipelines without relying on external file uploads, we use BigQuery&#39;s relational array mechanics (<code>UNNEST(GENERATE_ARRAY(...))</code>) to construct mock history.</p>
-<p>Execute this data initialization script to load 100 synchronized entities across all relational domains:</p>
-<pre><code language="language-sql" class="language-sql">-- 3. POPULATE DATA (100 RECORDS)
+        <p>Developing and testing data pipelines often requires realistic datasets. However, relying on production data during development poses security risks and operational bottlenecks.</p>
+<p>To bypass this, we will use BigQuery&#39;s powerful array generation mechanics (<code>UNNEST(GENERATE_ARRAY(...))</code>) to synthetically construct mock transaction history and master data. This ensures we have a fully functional, self-contained test environment.</p>
+<p>Execute the following script to systematically generate 100 synchronized entities across all domains:</p>
+<pre><code language="language-sql" class="language-sql">-- 3. POPULATE DATA: Generating synthetic records for testing
 -----------------------------------------------------------------------------------------
 
 -- Populate Material Master (IDs: MAT-100 to MAT-199)
-INSERT INTO `Your GCP ProjectID.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
+INSERT INTO `Your_GCP_ProjectID.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
 SELECT CONCAT(&#39;MAT-&#39;, CAST(i AS STRING)), &#39;E&#39;, CONCAT(&#39;Material &#39;, CAST(i AS STRING)), CAST(10.5 + i AS NUMERIC), CAST(9.0 + i AS NUMERIC), &#39;KG&#39;
 FROM UNNEST(GENERATE_ARRAY(100, 199)) AS i;
 
 -- Populate Customer Master (IDs: CUST-1001 to CUST-1100)
-INSERT INTO `Your GCP ProjectID.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
+INSERT INTO `Your_GCP_ProjectID.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
 SELECT &#39;012&#39;, CONCAT(&#39;CUST-&#39;, CAST(i AS STRING)), CONCAT(&#39;Cust Name &#39;, CAST(i AS STRING)), &#39;US&#39;, &#39;0001&#39;
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate Plant Master (IDs: PLNT-10 to PLNT-109)
-INSERT INTO `Your GCP ProjectID.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
+INSERT INTO `Your_GCP_ProjectID.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
 SELECT CONCAT(&#39;PLNT-&#39;, CAST(i AS STRING)), &#39;E&#39;, CONCAT(&#39;Plant Hub &#39;, CAST(i AS STRING)), &#39;US&#39;
 FROM UNNEST(GENERATE_ARRAY(10, 109)) AS i;
 
 -- Populate KNA1 Customer Localization Text
-INSERT INTO `Your GCP ProjectID.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
+INSERT INTO `Your_GCP_ProjectID.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
 SELECT &#39;012&#39;, CONCAT(&#39;CUST-&#39;, CAST(i AS STRING)), CONCAT(&#39;Legal Ent &#39;, CAST(i AS STRING)), &#39;US&#39;
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate BUT000 Business Partner Context
-INSERT INTO `Your GCP ProjectID.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
+INSERT INTO `Your_GCP_ProjectID.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
 SELECT &#39;012&#39;, CONCAT(&#39;CUST-&#39;, CAST(i AS STRING)), CONCAT(&#39;BP Org &#39;, CAST(i AS STRING)), &#39;GRP1&#39;
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate T077X Account Group Definitions
-INSERT INTO `Your GCP ProjectID.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
+INSERT INTO `Your_GCP_ProjectID.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
 VALUES (&#39;012&#39;, &#39;E&#39;, &#39;0001&#39;, &#39;Standard Customer&#39;);
 
 -- Populate Base Actual Sales Records (Mapped dynamically to valid entities)
-INSERT INTO `Your GCP ProjectID.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
+INSERT INTO `Your_GCP_ProjectID.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
 SELECT
   i, 
   CONCAT(&#39;DOC-&#39;, CAST(5000+i AS STRING)), 
@@ -218,9 +230,9 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
       </google-codelab-step>
     
       <google-codelab-step label="Step 4: Verification &amp; Validation Testing" duration="0">
-        <p>Before shipping upstream Medallion layer updates (<code>actual_sales_step1</code> through <code>step4</code>), data engineers must ensure zero relational drift. We accomplish this using two core testing patterns.</p>
+        <p>Before migrating data upstream into our Medallion layer updates (<code>actual_sales_step1</code> through <code>step4</code>), data engineers must ensure zero relational drift. Missing foreign keys or duplicate records can cause downstream reporting errors. We accomplish this using two core testing patterns.</p>
 <h2 is-upgraded>Test 1: Full Inner Join Traceability</h2>
-<p>This test verifies whether transactional facts correctly trace cleanly across dimensions using strict <code>INNER JOIN</code> conditions.</p>
+<p>This test verifies whether transactional facts correctly map to their descriptive dimensions. By using strict <code>INNER JOIN</code> conditions, any transaction missing a corresponding master data record will be automatically excluded, immediately highlighting data integrity issues.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   -- Transactional Data
   s.record,
@@ -240,45 +252,45 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
   b.NAME_ORG1 AS business_partner_org,
   -- Account Group Text
   t.TXT30 AS account_group_desc
-FROM `Your GCP ProjectID.input_layer.actual_sales` AS s
-INNER JOIN `Your GCP ProjectID.sap_master.MaterialMD` AS m
+FROM `Your_GCP_ProjectID.input_layer.actual_sales` AS s
+INNER JOIN `Your_GCP_ProjectID.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = &#39;E&#39;
-INNER JOIN `Your GCP ProjectID.sap_master.PlantMD` AS p
+INNER JOIN `Your_GCP_ProjectID.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = &#39;E&#39;
-INNER JOIN `Your GCP ProjectID.sap_master.CustomerMD` AS c
+INNER JOIN `Your_GCP_ProjectID.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = &#39;012&#39;
-INNER JOIN `Your GCP ProjectID.sap_text.kna1` AS k
+INNER JOIN `Your_GCP_ProjectID.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = &#39;012&#39;
-INNER JOIN `Your GCP ProjectID.sap_text.but000` AS b
+INNER JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = &#39;012&#39;
-INNER JOIN `Your GCP ProjectID.sap_text.t077x` AS t
+INNER JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;
 ORDER BY s.record ASC;
 </code></pre>
 <h2 is-upgraded>Test 2: Relational Integrity Check</h2>
-<p>This diagnostic script relies on <code>LEFT JOIN</code> mechanics combined with <code>COUNTIF</code> checks to quickly isolate unmatched foreign key footprints.</p>
-<p><strong>Success Evaluation Criterion:</strong> Every diagnostic <code>missing_*_matches</code> indicator count metric output <strong>must read exactly 0</strong>.</p>
+<p>While the previous test drops invalid rows, this diagnostic script relies on <code>LEFT JOIN</code> mechanics combined with <code>COUNTIF</code> checks to quickly isolate and flag unmatched foreign key footprints without removing them.</p>
+<p><strong>Success Evaluation Criterion:</strong> For a perfectly synchronized environment, every diagnostic <code>missing_*_matches</code> indicator count metric output <strong>must read exactly 0</strong>.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   COUNT(*) AS total_sales_records,
-  -- If any of these counts are &gt; 0, that dimension is missing joining keys!
+  -- A count &gt; 0 indicates missing joining keys in the specified dimension!
   COUNTIF(m.Material_MATERIAL IS NULL) AS missing_material_matches,
   COUNTIF(p.Plant_PLANT IS NULL) AS missing_plant_matches,
   COUNTIF(c.CustomerNumber_KUNNR IS NULL) AS missing_customer_matches,
   COUNTIF(k.KUNNR IS NULL) AS missing_kna1_text_matches,
   COUNTIF(b.PARTNER IS NULL) AS missing_but000_text_matches,
   COUNTIF(t.KTOKD IS NULL) AS missing_t077x_text_matches
-FROM `Your GCP ProjectID.input_layer.actual_sales` AS s
-LEFT JOIN `Your GCP ProjectID.sap_master.MaterialMD` AS m
+FROM `Your_GCP_ProjectID.input_layer.actual_sales` AS s
+LEFT JOIN `Your_GCP_ProjectID.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = &#39;E&#39;
-LEFT JOIN `Your GCP ProjectID.sap_master.PlantMD` AS p
+LEFT JOIN `Your_GCP_ProjectID.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = &#39;E&#39;
-LEFT JOIN `Your GCP ProjectID.sap_master.CustomerMD` AS c
+LEFT JOIN `Your_GCP_ProjectID.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = &#39;012&#39;
-LEFT JOIN `Your GCP ProjectID.sap_text.kna1` AS k
+LEFT JOIN `Your_GCP_ProjectID.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = &#39;012&#39;
-LEFT JOIN `Your GCP ProjectID.sap_text.but000` AS b
+LEFT JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = &#39;012&#39;
-LEFT JOIN `Your GCP ProjectID.sap_text.t077x` AS t
+LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;;
 </code></pre>
 
@@ -286,22 +298,23 @@ LEFT JOIN `Your GCP ProjectID.sap_text.t077x` AS t
       </google-codelab-step>
     
       <google-codelab-step label="Supplemental Guide: Production Dataform Framework &amp; Modules" duration="0">
-        <p>This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using Google Cloud Dataform.</p>
+        <p>In modern data engineering, managing SQL scripts manually is prone to error and difficult to track. This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using <strong>Google Cloud Dataform</strong>, a service designed to manage data transformations in BigQuery.</p>
 <h2 is-upgraded>Part 1: The Production Framework (Standards &amp; Protocol)</h2>
-<p>All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors.</p>
+<p>All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors to maintain code quality.</p>
 <h2 is-upgraded>Step 1: Open BigQuery in GCP Console</h2>
-<p>Navigate to the Google Cloud Console, select your project (<code>demo-pep</code>), and open the BigQuery console from the navigation menu. In the BigQuery explorer sidebar, look for the <strong>Pipelines</strong> dropdown menu. Click the three dots (options menu) next to Pipelines and select <strong>Create pipeline</strong>.</p>
+<p>Navigate to the Google Cloud Console, select your project, and open the <strong>BigQuery</strong> console from the navigation menu. In the BigQuery explorer sidebar, look for the <strong>Pipelines</strong> dropdown menu. Click the three dots (options menu) next to Pipelines and select <strong>Create pipeline</strong>.</p>
 <p class="image-container"><img alt="GCP BigQuery Navigation" style="width: 400.00px" src="img/d8c4419e64756601.png"></p>
-<h2 is-upgraded>Step 2: Rename Pipline and Start Agent</h2>
-<p>Rename the pipeline from <strong>Untitled pipeline</strong> to you desired name like <strong>DE_Agent_Pipeline</strong>. Click on <code>Ask Agent</code> in the top menu.</p>
+<h2 is-upgraded>Step 2: Rename Pipeline and Start Agent</h2>
+<p>Organization is key. Rename the pipeline from <strong>Untitled pipeline</strong> to a descriptive name, such as <strong>DE_Agent_Pipeline</strong>. Once renamed, click on <code>Ask Agent</code> in the top menu to initiate our AI-assisted workflow.</p>
 <p class="image-container"><img alt="Create Pipeline Context Menu" style="width: 400.00px" src="img/febdad90c968c81c.png"></p>
-<p>It will open a popup at the bottom, there click the <code>Pipeline instructions</code> and it will open a new window with <code>GEMINI.md</code> file name. Now copy the below content to the file and save it</p>
-<pre><code>Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the &#34;Medallion Architecture&#34; logic .
+<p>A prompt window will open at the bottom of the screen. Click on <code>Pipeline instructions</code> to open a new context window with the filename <code>GEMINI.md</code>. This is where we define the rules for our agent.</p>
+<p>Copy the comprehensive instruction block below into the file and save it. These rules ensure the agent writes code that complies with our Dataform standards:</p>
+<pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the &#34;Medallion Architecture&#34; logic .
 Technical Context:
-Initial Source: Your GCP ProjectID.input_layer.actual_sales
+Initial Source: Your_GCP_ProjectID.input_layer.actual_sales
 Target Dataset: final_layer
-Master Data Source: Your GCP ProjectID.sap_master
-Text Data Source: Your GCP ProjectID.sap_text
+Master Data Source: Your_GCP_ProjectID.sap_master
+Text Data Source: Your_GCP_ProjectID.sap_text
 Dataform Best Practices (Required for ALL scripts):
 Config Block: Use type: &#34;table&#34;. Include the tag [&#34;zinbobu_agent&#34;] and a comprehensive description field summarizing the job&#39;s business purpose.
 Dependency Management: Exclusively use the ref() function to establish the transformation chain: Job 1 -&gt; Job 2 -&gt; Job 3 -&gt; Job 4.
@@ -312,144 +325,155 @@ Modular Execution: You are to generate code for one Job at a time only .
 Pause &amp; Wait: After completing the requested Job, you must explicitly ask me for the instruction for the next module 
 No Leapfrogging: Do not generate logic for future Jobs (e.g., joins or renames) until that specific Job is requested 
 </code></pre>
-<p>Now, push the changes to the code repo. the screen looks like below:</p>
-<p class="image-container"><img alt="instructions file" style="width: 400.00px" src="img/ae7a06e81ed61a21.png"></p>
-<p>Then get back to previous window, and now you will see <code>one instruction file added</code>, then click save.</p>
-<p class="image-container"><img alt="agent instructions" style="width: 400.00px" src="img/271b9092472a54b3.png"></p>
+<p>After updating the instructions, commit and push the changes to your code repository. The interface should resemble the following:</p>
+<p class="image-container"><img alt="instructions file" style="width: 400.00px" src="img/0.png"></p>
+<p>Returning to the previous window, you should now see a confirmation indicating <code>one instruction file added</code>. Click save to finalize the setup.</p>
+<p class="image-container"><img alt="agent instructions" style="width: 400.00px" src="img/0.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Module 1" duration="0">
-        <p>Now we go module wise, and ask agent to generate the pipeline accordingly.</p>
-<p>In the pipeline canvas, Go to Ask Agent popup and provide the below Module 1 prompt</p>
-<pre><code>Module 1: Raw Ingestion (Job 1)
+      <google-codelab-step label="Module 1: Raw Ingestion" duration="0">
+        <p>In this section, we begin building out our data pipeline module by module. Our first objective is to construct the foundational <strong>Bronze/Raw Ingestion Layer</strong>.</p>
+<p>Navigate to the pipeline canvas, open the <strong>Ask Agent</strong> popup, and provide the following prompt for Module 1:</p>
+<pre><code language="language-text" class="language-text">Module 1: Raw Ingestion (Job 1)
 Instruction: Based on the common requirements provided, create the first module: actual_sales_step1.sqlx.
 Task: Select all columns and rows from the actual_sales source table.
 Formatting: Ensure the config block includes a description identifying this as the &#34;Bronze/Raw Ingestion Layer&#34;.
 </code></pre>
-<p>Now the agent will generate the pipeline as below:</p>
+<p>The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code.</p>
 <p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/509ce27b29598bde.png"></p>
-<p>when we run the pipeline generated by the agent, table <code>actual_sales_step1</code> will be created under <code>final_layer</code> dataset</p>
-<p class="image-container"><img alt="Module 1 Output" style="width: 400.00px" src="img/3d33d3ccaa3944a6.png"></p>
+<p>Upon executing this generated pipeline, you will find that the new table <code>actual_sales_step1</code> has been successfully created under the <code>final_layer</code> dataset, maintaining a 1:1 parity with the source data.</p>
+<p class="image-container"><img alt="Module 1 Output" style="width: 400.00px" src="img/0.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Module 2" duration="0">
-        <p>Provide the below Module 2 prompt</p>
-<pre><code>Module 2: Standardization &amp; Schema Cleaning (Job 2)
+      <google-codelab-step label="Module 2: Standardization &amp; Schema Cleaning" duration="0">
+        <p>With raw data ingested, the next logical step in our architecture is standardizing the schema. This involves stripping out technical prefixes to make the data more accessible to analysts.</p>
+<p>Provide the following prompt to the agent for Module 2:</p>
+<pre><code language="language-text" class="language-text">Module 2: Standardization &amp; Schema Cleaning (Job 2)
 Instruction: Based on the common requirements, create actual_sales_step2.sqlx.
 Dependency: This script must reference actual_sales_step1.
 Task: Clean technical prefixes from all column names. Specifically, strip _bic_, bic_, or a leading _ (e.g., _bic_bill_date becomes bill_date).
 Audit Requirement: For every renamed column, add an inline SQL comment -- Renamed from [Original Name].
 </code></pre>
-<p>Now the agent will generate the pipeline as below:</p>
-<p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/dcf549c4c575b2c4.png"></p>
-<p>when we run the pipeline generated by the agent, table <code>actual_sales_step2</code> will be created under <code>final_layer</code> dataset</p>
-<p class="image-container"><img alt="Module 2 Output" style="width: 400.00px" src="img/810e75ea65a91feb.png"></p>
+<p>Observe how the agent updates the pipeline to include the schema cleaning logic.</p>
+<p class="image-container"><img alt="Module 2 Generation" style="width: 400.00px" src="img/dcf549c4c575b2c4.png"></p>
+<p>After running the pipeline, the <code>actual_sales_step2</code> table is created in the <code>final_layer</code> dataset, showcasing clean, user-friendly column names.</p>
+<p class="image-container"><img alt="Module 2 Output" style="width: 400.00px" src="img/0.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Module 3" duration="0">
-        <p>Provide the below Module 3 prompt</p>
-<pre><code>Module 3: Master Data Enrichment (Job 3)
+      <google-codelab-step label="Module 3: Master Data Enrichment" duration="0">
+        <p>Raw transactional data is often cryptic (e.g., storing a Material ID but not the Material Name). In this module, we enrich our transactions by joining them against descriptive master datasets.</p>
+<p>Provide the following prompt to build Module 3:</p>
+<pre><code language="language-text" class="language-text">Module 3: Master Data Enrichment (Job 3)
 Instruction: Based on the common requirements, create actual_sales_step3.sqlx.
 Dependency: Reference actual_sales_step2.
 Join Logic (Material): LEFT JOIN with MaterialMD. Select MaterialType, MaterialGroup, Product_ZPRODUCTC, and BrandName_CBRANDNME_T.
 Join Logic (Plant): LEFT JOIN with PlantMD. Select MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
 Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate records.
 </code></pre>
-<p>Now the agent will generate the pipeline as below:</p>
-<p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/e9b33d31d99664d4.png"></p>
-<p>when we run the pipeline generated by the agent, table <code>actual_sales_step3</code> will be created under <code>final_layer</code> dataset</p>
-<p class="image-container"><img alt="Module 3 Output" style="width: 400.00px" src="img/c934572c1e751578.png"></p>
+<p>The agent will seamlessly weave the <code>LEFT JOIN</code> logic into our transformation chain.</p>
+<p class="image-container"><img alt="Module 3 Generation" style="width: 400.00px" src="img/e9b33d31d99664d4.png"></p>
+<p>Executing this pipeline yields the <code>actual_sales_step3</code> table, now brimming with descriptive material and plant information.</p>
+<p class="image-container"><img alt="Module 3 Output" style="width: 400.00px" src="img/0.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Module 4" duration="0">
-        <p>Provide the below Module 4 prompt</p>
-<pre><code>Module 4: Human-Readable Text Enrichment (Job 4)
+      <google-codelab-step label="Module 4: Human-Readable Text Enrichment" duration="0">
+        <p>To complete our Gold/Final layer, we must attach localization and human-readable text enrichment from our SAP text tables. This ensures dashboards and reports are intuitive for business users.</p>
+<p>Use the following prompt for Module 4:</p>
+<pre><code language="language-text" class="language-text">Module 4: Human-Readable Text Enrichment (Job 4)
 Instruction: Based on the common requirements, create the final module: actual_sales_step4.sqlx.
 Dependency: Reference actual_sales_step3.
 Enrichment Task: Join with text tables kna1, but000, and t077x.
 Text Standards: Filter by Language (&#39;E&#39;) and SAP Client (&#39;012&#39;).
 Selection: Retrieve NAME1 from kna1 and TXT30 from t077x and text fields from but000. Use unique table aliases for each join.
 </code></pre>
-<p>Now the agent will generate the pipeline as below:</p>
-<p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/3e872accbf3796a4.png"></p>
+<p>The agent processes the final enrichment step, completing the core pipeline logic.</p>
+<p class="image-container"><img alt="Module 4 Generation" style="width: 400.00px" src="img/3e872accbf3796a4.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Module 5" duration="0">
-        <p>Provide the below Module 5 prompt</p>
-<pre><code>Module 5: Master Data Enrichment 
+      <google-codelab-step label="Module 5: Extending Enrichment Iteratively" duration="0">
+        <p>In real-world scenarios, requirements evolve, and you may need to amend previous modules. Here, we demonstrate how to request an enhancement to an existing step.</p>
+<p>Provide the following prompt to enhance Module 3 with customer data:</p>
+<pre><code language="language-text" class="language-text">Module 5: Master Data Enrichment Extension
 Instruction: Based on the common requirements, enhance actual_sales_step3.sqlx.
 Dependency: Reference actual_sales_step2.
-Join Logic (CustomerMD): LEFT JOIN with CustomerMD.identify the relevant joining keys and fetch the relevant fields from CustomerMD
+Join Logic (CustomerMD): LEFT JOIN with CustomerMD. Identify the relevant joining keys and fetch the relevant fields from CustomerMD.
 Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate records.
 </code></pre>
-<p>Now the agent will generate the pipeline as below:</p>
-<p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/6313bc170d6a03f8.png"></p>
+<p>The agent thoughtfully refactors the pipeline graph to incorporate this new requirement.</p>
+<p class="image-container"><img alt="Module 5 Generation" style="width: 400.00px" src="img/6313bc170d6a03f8.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Module 6" duration="0">
-        <p>Provide the below Module 6 prompt</p>
-<pre><code>Module 6: Master Data Enrichment - correction
+      <google-codelab-step label="Module 6: Course Corrections" duration="0">
+        <p>AI agents, much like human engineers, occasionally need specific constraints reiterated. If a column is inappropriately renamed, you can effortlessly instruct the agent to correct its behavior.</p>
+<p>Provide the following correction prompt:</p>
+<pre><code language="language-text" class="language-text">Module 6: Master Data Enrichment - Correction
 Instruction: Based on the common requirements, enhance actual_sales_step3.sqlx.
 Dependency: Reference actual_sales_step2.
 I need a correction to the script actual_sales_step3.sqlx.
-Do not rename the master table columns, keep it as it is .
+Do not rename the master table columns, keep them exactly as they are.
 Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate records.
 </code></pre>
-<p>Now the agent will generate the pipeline as below:</p>
-<p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/9fefa966a4963a6f.png"></p>
+<p>The agent applies the requested corrections, yielding a precise and compliant transformation script.</p>
+<p class="image-container"><img alt="Module 6 Generation" style="width: 400.00px" src="img/9fefa966a4963a6f.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Additional Content" duration="0">
-        <p>Below ones are yet to be tuned correctly, but can train the same output from agent with these single and informal prompt too.</p>
-<h2 is-upgraded>Single Prompt</h2>
-<pre><code>Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the &#34;Medallion Architecture&#34; logic.
+      <google-codelab-step label="Additional Content &amp; Advanced Prompting" duration="0">
+        <p>As you become more comfortable navigating Dataform with an AI agent, you can begin feeding it more holistic, multi-step instructions. Below is an example of an advanced, comprehensive prompt that dictates the entire pipeline architecture in one go.</p>
+<p>While single, large prompts can be highly efficient, they may require careful tuning to ensure the agent captures every nuance without hallucinations.</p>
+<h2 is-upgraded>Advanced Single Prompt Example</h2>
+<pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the &#34;Medallion Architecture&#34; logic.
 Technical Context:
-Initial Source: Your GCP ProjectID.input_layer.actual_sales
+Initial Source: Your_GCP_ProjectID.input_layer.actual_sales
 Target Dataset: final_layer
-Master table Sources: Your GCP ProjectID.sap_master and Your GCP ProjectID.sap_text
-Text table  Sources: Your GCP ProjectID.sap_master and Your GCP ProjectID.sap_text
+Master table Sources: Your_GCP_ProjectID.sap_master and Your_GCP_ProjectID.sap_text
+Text table  Sources: Your_GCP_ProjectID.sap_master and Your_GCP_ProjectID.sap_text
+
 Dataform Best Practices Requirements for ALL Scripts:
 Config Block: Use type: &#34;table&#34;. Include the tag [&#34;zinbobu_agent&#34;] and a comprehensive description field summarizing the job&#39;s purpose.
 Dependency Management: Exclusively use the ref() function to establish the chain: Job 1 -&gt; Job 2 -&gt; Job 3 -&gt; Job 4.
 Auditability: Every transformation must be explained with inline SQL comments.
 Data Quality: Include an assertions block in relevant scripts to check for null values in primary key columns or uniqueness.
+
 Job-Specific Logic:
 Job 1 (Ingestion Layer): Create actual_sales_step1.sqlx.
-Task: Materialize a 1:1 copy of the source actual_sales_.
+Task: Materialize a 1:1 copy of the source actual_sales.
 Documentation: Tag this as the &#34;Raw Ingestion Layer&#34; in the config.
+
 Job 2 (Standardization Layer): Create actual_sales_step2.sqlx.
 Transformation: Standardize the schema by cleaning column names. Strip prefixes like _bic_, bic_, or leading underscores.
 Rule: For every renaming, add the comment -- AUDIT: Renamed from [Original Name] next to the field.
 Assertion: Check that the resulting bill_date (or equivalent) is never null.
+
 Job 3 (Master Data Enrichment): Create actual_sales_step3.sqlx.
 Join Logic: Perform LEFT JOIN operations with MaterialMD and PlantMD.
 Standard master table filters: Apply a WHERE clause for LanguageKey = &#39;E&#39; for both master tables to prevent row explosion.
 Material Selection: Fetch MaterialType, MaterialGroup, Product_ZPRODUCTC, and BrandName_CBRANDNME_T.
 Plant Selection: Fetch MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
 
-
 Job 4 (Text Table Enrichment - Final Layer): Create actual_sales_step4.sqlx.
 Task: Join with kna1, but000, and t077x.
 Standards: Filter by Language (&#39;E&#39;) and Client (&#39;012&#39;).
 Select: Retrieve NAME1 from kna1 and TXT30 from t077x. Use unique aliases like customer_text and category_description.
 Performance: Add bigquery: { partitionBy: &#34;CLEAN_DATE_FIELD&#34; } to the config block if a date field is available.
+
 Output Format: Provide distinct code blocks. Clearly label each with its intended filename (e.g., actual_sales_step1.sqlx). 
 Think through the logic step-by-step to ensure column name collisions are avoided.
 </code></pre>
+<p>Congratulations on completing the Codelab! You are now equipped with the practical knowledge to construct and manage scalable, Medallion-style data pipelines in BigQuery using Google Cloud Dataform and AI-assisted engineering.</p>
 
 
       </google-codelab-step>

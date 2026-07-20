@@ -8,7 +8,7 @@ feedback link: https://github.com/your-repo/issues
 
 # Codelab: Data Engineering - Preparing Data in BigQuery
 
-## 1. Overview
+## Overview
 In this codelab, you will learn how to set up and prepare a data pipeline architecture in Google Cloud BigQuery using a Medallion (layered) data approach. We will walk through cleaning up existing environments, establishing rigorous relational schemas across multiple staging layers, generating programmatic mock data, and writing key validation tests.
 
 ### What You'll Learn
@@ -20,19 +20,19 @@ In this codelab, you will learn how to set up and prepare a data pipeline archit
 
 ---
 
-## 2. Environment Architecture Overview
+## Environment Architecture Overview
 Before executing queries, it is essential to understand the organization of your datasets and tables within the project. The data environment is structured as follows:
 
 | Layer / Purpose | Project ID | Dataset | Table Name |
 | :--- | :--- | :--- | :--- |
-| **Source (Raw SAP)** | `endless-gasket-348709` | `input_layer` | `actual_sales` |
-| **Target (Medallion)** | `endless-gasket-348709` | `final_layer` | `actual_sales_step1` through `step4` |
-| **Master Data** | `endless-gasket-348709` | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` |
-| **Text Enrichment** | `endless-gasket-348709` | `sap_text` | `kna1`, `but000`, `t077x` |
+| **Source (Raw SAP)** | `Your GCP ProjectID` | `input_layer` | `actual_sales` |
+| **Target (Medallion)** | `Your GCP ProjectID` | `final_layer` | `actual_sales_step1` through `step4` |
+| **Master Data** | `Your GCP ProjectID` | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` |
+| **Text Enrichment** | `Your GCP ProjectID` | `sap_text` | `kna1`, `but000`, `t077x` |
 
 ---
 
-## 3. Step 1: Environment Cleanup
+## Step 1: Environment Cleanup
 To ensure a clean deployment and avoid conflicts with old schema versions, we start by dropping any existing tables.
 
 Run the following standard BigQuery SQL commands in your workspace[cite: 1]:
@@ -40,17 +40,17 @@ Run the following standard BigQuery SQL commands in your workspace[cite: 1]:
 ```sql
 -- 1. CLEANUP
 -----------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS `endless-gasket-348709.input_layer.actual_sales`;
-DROP TABLE IF EXISTS `endless-gasket-348709.sap_master.MaterialMD`;
-DROP TABLE IF EXISTS `endless-gasket-348709.sap_master.CustomerMD`;
-DROP TABLE IF EXISTS `endless-gasket-348709.sap_master.PlantMD`;
-DROP TABLE IF EXISTS `endless-gasket-348709.sap_text.kna1`;
-DROP TABLE IF EXISTS `endless-gasket-348709.sap_text.but000`;
-DROP TABLE IF EXISTS `endless-gasket-348709.sap_text.t077x`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.input_layer.actual_sales`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.sap_master.MaterialMD`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.sap_master.CustomerMD`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.sap_master.PlantMD`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.kna1`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.but000`;
+DROP TABLE IF EXISTS `Your GCP ProjectID.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 ```
 
-## 4. Step 2: Create DDL Schemas
+## Step 2: Create DDL Schemas
 Now that the environment is clear, your next phase involves defining the structural properties for each layer. Each master schema handles specific data grain domains.
 
 Execute these DDL statements to construct the empty database structures:
@@ -60,7 +60,7 @@ Execute these DDL statements to construct the empty database structures:
 -----------------------------------------------------------------------------------------
 
 -- MATERIAL MASTER DATA
-CREATE TABLE `endless-gasket-348709.sap_master.MaterialMD` (
+CREATE TABLE `Your GCP ProjectID.sap_master.MaterialMD` (
   Material_MATERIAL STRING, LanguageKey STRING, Material_MATERIAL_T STRING, MaterialType_MATL_TYPE STRING, MaterialGroup_MATL_GROUP STRING,
   BaseUnit STRING, GrossWeight NUMERIC, NetWeight NUMERIC, WeightUnit STRING, Volume NUMERIC, VolumeUnit STRING, IndustrySector STRING,
   CreatedBy STRING, CreatedOn DATE, ChangedBy STRING, LastChangedOn DATE, Division STRING, ProductHierarchy STRING, Brand STRING,
@@ -68,7 +68,7 @@ CREATE TABLE `endless-gasket-348709.sap_master.MaterialMD` (
 );
 
 -- CUSTOMER MASTER DATA
-CREATE TABLE `endless-gasket-348709.sap_master.CustomerMD` (
+CREATE TABLE `Your GCP ProjectID.sap_master.CustomerMD` (
   Client_MANDT STRING, CustomerNumber_KUNNR STRING, Name1_NAME1 STRING, Name2_NAME2 STRING, CountryKey_LAND1 STRING,
   City_ORT01 STRING, PostalCode_PSTLZ STRING, Region_REGIO STRING, Street_STRAS STRING, Phone_TELF1 STRING, Fax_TELFX STRING,
   AccountGroup_KTOKD STRING, Industry_BRSCH STRING, CreatedOn_ERDAT DATE, CreatedBy_ERNAM STRING, DeletionFlag_LOEVM STRING,
@@ -77,7 +77,7 @@ CREATE TABLE `endless-gasket-348709.sap_master.CustomerMD` (
 );
 
 -- PLANT MASTER DATA
-CREATE TABLE `endless-gasket-348709.sap_master.PlantMD` (
+CREATE TABLE `Your GCP ProjectID.sap_master.PlantMD` (
   Plant_PLANT STRING, LanguageKey STRING, Plant_PLANT_T STRING, FactoryCalendar STRING, Name2 STRING, HouseNum STRING,
   Street STRING, PoBox STRING, PostalCode STRING, City STRING, Country STRING, Region STRING, TaxJurisdiction STRING,
   PurchasingOrg STRING, SalesOrg STRING, DistChannel STRING, Division STRING, Category STRING, BatchMgmt STRING,
@@ -85,27 +85,27 @@ CREATE TABLE `endless-gasket-348709.sap_master.PlantMD` (
 );
 
 -- TEXT ENRICHMENT TABLES
-CREATE TABLE `endless-gasket-348709.sap_text.kna1` (
+CREATE TABLE `Your GCP ProjectID.sap_text.kna1` (
   MANDT STRING, KUNNR STRING, NAME1 STRING, LAND1 STRING, ORT01 STRING, PSTLZ STRING, REGIO STRING, STRAS STRING, TELF1 STRING, TELFX STRING,
   KTOKD STRING, BRSCH STRING, ERDAT DATE, ERNAM STRING, LOEVM STRING, STCD1 STRING, STCD2 STRING, SPRAS STRING, VBUND STRING, STCEG STRING,
   NIELS STRING, ORT02 STRING, KUKLA STRING, BEGRU STRING, ADRNR STRING
 );
 
-CREATE TABLE `endless-gasket-348709.sap_text.but000` (
+CREATE TABLE `Your GCP ProjectID.sap_text.but000` (
   CLIENT STRING, PARTNER STRING, TYPE STRING, BP_CATEGORY STRING, BP_GROUP STRING, NAME_ORG1 STRING, NAME_ORG2 STRING,
   NAME_LAST STRING, NAME_FIRST STRING, TITLE STRING, LANGU STRING, SEARCHTERM1 STRING, SEARCHTERM2 STRING,
   BIRTH_DATE DATE, VALID_FROM DATE, VALID_TO DATE, NATION STRING, HOUSE_NUM STRING, STREET STRING, CITY STRING,
   POSTAL_CODE STRING, COUNTRY STRING, REGION STRING, TEL_NUMBER STRING, SMTP_ADDR STRING
 );
 
-CREATE TABLE `endless-gasket-348709.sap_text.t077x` (
+CREATE TABLE `Your GCP ProjectID.sap_text.t077x` (
   MANDT STRING, SPRAS STRING, KTOKD STRING, TXT30 STRING, TXT15 STRING,
   F1 STRING, F2 STRING, F3 STRING, F4 STRING, F5 STRING, F6 STRING, F7 STRING, F8 STRING, F9 STRING, F10 STRING,
   F11 STRING, F12 STRING, F13 STRING, F14 STRING, F15 STRING, F16 STRING, F17 STRING, F18 STRING, F19 STRING, F20 STRING, F21 STRING
 );
 
 -- TRANSACTIONAL INPUT LAYER
-CREATE TABLE `endless-gasket-348709.input_layer.actual_sales` (
+CREATE TABLE `Your GCP ProjectID.input_layer.actual_sales` (
   record INT64, doc_number STRING, material STRING, sold_to STRING, plant STRING, cust_class STRING, calday DATE,
   _bic_bill_date DATE, bic_inv_bkd NUMERIC, _s_ord_item STRING, _bic_bill_item STRING, doc_currcy STRING,
   fiscper STRING, fiscyear STRING, salesorg STRING, distr_chan STRING, division STRING,
@@ -116,7 +116,7 @@ CREATE TABLE `endless-gasket-348709.input_layer.actual_sales` (
 ```
 
 
-## 5. Step 3: Populate Mock Data
+## Step 3: Populate Mock Data
 To facilitate automated testing pipelines without relying on external file uploads, we use BigQuery's relational array mechanics (`UNNEST(GENERATE_ARRAY(...))`) to construct mock history. 
 
 Execute this data initialization script to load 100 synchronized entities across all relational domains:
@@ -127,36 +127,36 @@ Execute this data initialization script to load 100 synchronized entities across
 -----------------------------------------------------------------------------------------
 
 -- Populate Material Master (IDs: MAT-100 to MAT-199)
-INSERT INTO `endless-gasket-348709.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
+INSERT INTO `Your GCP ProjectID.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
 SELECT CONCAT('MAT-', CAST(i AS STRING)), 'E', CONCAT('Material ', CAST(i AS STRING)), CAST(10.5 + i AS NUMERIC), CAST(9.0 + i AS NUMERIC), 'KG'
 FROM UNNEST(GENERATE_ARRAY(100, 199)) AS i;
 
 -- Populate Customer Master (IDs: CUST-1001 to CUST-1100)
-INSERT INTO `endless-gasket-348709.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
+INSERT INTO `Your GCP ProjectID.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
 SELECT '012', CONCAT('CUST-', CAST(i AS STRING)), CONCAT('Cust Name ', CAST(i AS STRING)), 'US', '0001'
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate Plant Master (IDs: PLNT-10 to PLNT-109)
-INSERT INTO `endless-gasket-348709.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
+INSERT INTO `Your GCP ProjectID.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
 SELECT CONCAT('PLNT-', CAST(i AS STRING)), 'E', CONCAT('Plant Hub ', CAST(i AS STRING)), 'US'
 FROM UNNEST(GENERATE_ARRAY(10, 109)) AS i;
 
 -- Populate KNA1 Customer Localization Text
-INSERT INTO `endless-gasket-348709.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
+INSERT INTO `Your GCP ProjectID.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
 SELECT '012', CONCAT('CUST-', CAST(i AS STRING)), CONCAT('Legal Ent ', CAST(i AS STRING)), 'US'
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate BUT000 Business Partner Context
-INSERT INTO `endless-gasket-348709.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
+INSERT INTO `Your GCP ProjectID.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
 SELECT '012', CONCAT('CUST-', CAST(i AS STRING)), CONCAT('BP Org ', CAST(i AS STRING)), 'GRP1'
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate T077X Account Group Definitions
-INSERT INTO `endless-gasket-348709.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
+INSERT INTO `Your GCP ProjectID.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
 VALUES ('012', 'E', '0001', 'Standard Customer');
 
 -- Populate Base Actual Sales Records (Mapped dynamically to valid entities)
-INSERT INTO `endless-gasket-348709.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
+INSERT INTO `Your GCP ProjectID.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
 SELECT
   i, 
   CONCAT('DOC-', CAST(5000+i AS STRING)), 
@@ -178,7 +178,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
 
 ---
 
-## 6. Step 4: Verification & Validation Testing
+## Step 4: Verification & Validation Testing
 Before shipping upstream Medallion layer updates (`actual_sales_step1` through `step4`), data engineers must ensure zero relational drift. We accomplish this using two core testing patterns.
 
 ### Test 1: Full Inner Join Traceability
@@ -204,18 +204,18 @@ SELECT
   b.NAME_ORG1 AS business_partner_org,
   -- Account Group Text
   t.TXT30 AS account_group_desc
-FROM `endless-gasket-348709.input_layer.actual_sales` AS s
-INNER JOIN `endless-gasket-348709.sap_master.MaterialMD` AS m
+FROM `Your GCP ProjectID.input_layer.actual_sales` AS s
+INNER JOIN `Your GCP ProjectID.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = 'E'
-INNER JOIN `endless-gasket-348709.sap_master.PlantMD` AS p
+INNER JOIN `Your GCP ProjectID.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = 'E'
-INNER JOIN `endless-gasket-348709.sap_master.CustomerMD` AS c
+INNER JOIN `Your GCP ProjectID.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = '012'
-INNER JOIN `endless-gasket-348709.sap_text.kna1` AS k
+INNER JOIN `Your GCP ProjectID.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = '012'
-INNER JOIN `endless-gasket-348709.sap_text.but000` AS b
+INNER JOIN `Your GCP ProjectID.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = '012'
-INNER JOIN `endless-gasket-348709.sap_text.t077x` AS t
+INNER JOIN `Your GCP ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = '012' AND t.SPRAS = 'E'
 ORDER BY s.record ASC;
 ```
@@ -235,18 +235,18 @@ SELECT
   COUNTIF(k.KUNNR IS NULL) AS missing_kna1_text_matches,
   COUNTIF(b.PARTNER IS NULL) AS missing_but000_text_matches,
   COUNTIF(t.KTOKD IS NULL) AS missing_t077x_text_matches
-FROM `endless-gasket-348709.input_layer.actual_sales` AS s
-LEFT JOIN `endless-gasket-348709.sap_master.MaterialMD` AS m
+FROM `Your GCP ProjectID.input_layer.actual_sales` AS s
+LEFT JOIN `Your GCP ProjectID.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = 'E'
-LEFT JOIN `endless-gasket-348709.sap_master.PlantMD` AS p
+LEFT JOIN `Your GCP ProjectID.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = 'E'
-LEFT JOIN `endless-gasket-348709.sap_master.CustomerMD` AS c
+LEFT JOIN `Your GCP ProjectID.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = '012'
-LEFT JOIN `endless-gasket-348709.sap_text.kna1` AS k
+LEFT JOIN `Your GCP ProjectID.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = '012'
-LEFT JOIN `endless-gasket-348709.sap_text.but000` AS b
+LEFT JOIN `Your GCP ProjectID.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = '012'
-LEFT JOIN `endless-gasket-348709.sap_text.t077x` AS t
+LEFT JOIN `Your GCP ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = '012' AND t.SPRAS = 'E';
 ```
 
@@ -254,7 +254,7 @@ LEFT JOIN `endless-gasket-348709.sap_text.t077x` AS t
 
 ---
 
-## 7. Supplemental Guide: Production Dataform Framework & Modules
+## Supplemental Guide: Production Dataform Framework & Modules
 This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using Google Cloud Dataform. 
 
 ### Part 1: The Production Framework (Standards & Protocol)
@@ -276,10 +276,10 @@ Now copy the below content to the file and save it
 ```
 Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the "Medallion Architecture" logic .
 Technical Context:
-Initial Source: endless-gasket-348709.input_layer.actual_sales
+Initial Source: Your GCP ProjectID.input_layer.actual_sales
 Target Dataset: final_layer
-Master Data Source: endless-gasket-348709.sap_master
-Text Data Source: endless-gasket-348709.sap_text
+Master Data Source: Your GCP ProjectID.sap_master
+Text Data Source: Your GCP ProjectID.sap_text
 Dataform Best Practices (Required for ALL scripts):
 Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's business purpose.
 Dependency Management: Exclusively use the ref() function to establish the transformation chain: Job 1 -> Job 2 -> Job 3 -> Job 4.
@@ -301,7 +301,7 @@ Then get back to previous window, and now you will see `one instruction file add
 
 ---
 
-## 8. Module 1
+## Module 1
 Now we go module wise, and ask agent to generate the pipeline accordingly.
 
 In the pipeline canvas, Go to Ask Agent popup and provide the below Module 1 prompt
@@ -321,7 +321,7 @@ when we run the pipeline generated by the agent, table `actual_sales_step1` will
 
 <img src="img/ss_mod1.png" alt="Module 1 Output" width="400">
 
-## 9. Module 2
+## Module 2
 Provide the below Module 2 prompt
 
 ```
@@ -340,7 +340,7 @@ when we run the pipeline generated by the agent, table `actual_sales_step2` will
 
 <img src="img/ss_mod2.png" alt="Module 2 Output" width="400">
 
-## 10. Module 3
+## Module 3
 Provide the below Module 3 prompt
 
 ```
@@ -360,7 +360,7 @@ when we run the pipeline generated by the agent, table `actual_sales_step3` will
 
 <img src="img/ss_mod3.png" alt="Module 3 Output" width="400">
 
-## 11. Module 4
+## Module 4
 Provide the below Module 4 prompt
 
 ```
@@ -376,7 +376,7 @@ Now the agent will generate the pipeline as below:
 
 <img src="img/ss8.png" alt="Module 1" width="400">
 
-## 12. Module 5
+## Module 5
 Provide the below Module 5 prompt
 
 ```
@@ -391,7 +391,7 @@ Now the agent will generate the pipeline as below:
 
 <img src="img/ss9.png" alt="Module 1" width="400">
 
-## 13. Module 6
+## Module 6
 Provide the below Module 6 prompt
 
 ```
@@ -408,17 +408,17 @@ Now the agent will generate the pipeline as below:
 <img src="img/ss10.png" alt="Module 1" width="400">
 
 ---
-## 14. Additional Content
+## Additional Content
 Below ones are yet to be tuned correctly, but can train the same output from agent with these single and informal prompt too.
 
 ### Single Prompt
 ```
 Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the "Medallion Architecture" logic.
 Technical Context:
-Initial Source: endless-gasket-348709.input_layer.actual_sales
+Initial Source: Your GCP ProjectID.input_layer.actual_sales
 Target Dataset: final_layer
-Master table Sources: endless-gasket-348709.sap_master and endless-gasket-348709.sap_text
-Text table  Sources: endless-gasket-348709.sap_master and endless-gasket-348709.sap_text
+Master table Sources: Your GCP ProjectID.sap_master and Your GCP ProjectID.sap_text
+Text table  Sources: Your GCP ProjectID.sap_master and Your GCP ProjectID.sap_text
 Dataform Best Practices Requirements for ALL Scripts:
 Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's purpose.
 Dependency Management: Exclusively use the ref() function to establish the chain: Job 1 -> Job 2 -> Job 3 -> Job 4.

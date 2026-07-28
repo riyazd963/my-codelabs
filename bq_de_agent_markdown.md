@@ -255,7 +255,7 @@ ORDER BY s.record ASC;
 ### Test 2: Relational Integrity Check
 This diagnostic query validates the relational integrity of our mock data. By using a `LEFT JOIN` from the sales table to all master data tables, combined with `COUNTIF` statements, it counts how many sales records are missing corresponding dimensional data. 
 
-> **Expected Result:** To demonstrate how the agent identifies data drift, our mock data generation intentionally omits a few master data records. You should see `1` for `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`, highlighting that these foreign key constraints have been violated. 
+> **Expected Result:** To showcase the Data Engineering Agent's ability to detect data drift, we intentionally introduced minor inconsistencies in our mock data. Upon executing the query, you will observe a count of `1` for both `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`. This confirms that the query successfully caught the missing foreign key relationships.
 
 ```sql
 SELECT

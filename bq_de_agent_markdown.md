@@ -9,7 +9,18 @@ feedback link: https://github.com/your-repo/issues
 # Codelab: Demonstrating the Data Engineering Agent in BigQuery
 
 ## Overview
-Welcome to this comprehensive course showcasing the capabilities of the **Data Engineering (DE) Agent** in Google Cloud! Recently introduced as a powerful AI-driven assistant, the DE Agent is designed to revolutionize how data professionals build, manage, and scale data pipelines. It significantly accelerates development by translating natural language instructions into production-grade SQL, managing Dataform configurations, and autonomously enforcing architectural best practices.
+Welcome to this comprehensive course showcasing the capabilities of the **Data Engineering (DE) Agent** in Google Cloud! 
+
+**The Origin of the DE Agent**
+Recently introduced as a core pillar of Google Cloud's AI-driven data ecosystem, the DE Agent is deeply powered by Google's state-of-the-art Gemini foundational models. Born out of the need to reduce the operational overhead on data engineering teams, it was built specifically to understand deep data contexts, enterprise schemas, and complex transformation logic. By integrating directly into the BigQuery and Dataform workspaces, it bridges the gap between high-level business logic and low-level pipeline execution.
+
+**Core Capabilities of the DE Agent**
+The DE Agent is designed to revolutionize how data professionals build, manage, and scale data pipelines. Its robust capabilities include:
+* **Natural Language to Pipeline Code**: Seamlessly translates plain-English requirements into production-grade SQL and complex Dataform configurations.
+* **Context-Aware Schema Operations**: Intelligently analyzes existing table structures to autonomously determine optimal join keys, cast data types, and apply transformations without manual mapping.
+* **Automated Data Quality & Assertions**: Proactively generates and enforces data quality checks (such as null-checks and uniqueness) to maintain downstream data integrity.
+* **Pipeline Debugging and Course Correction**: Capable of ingesting error logs and user feedback to dynamically refactor and fix broken SQL logic on the fly.
+* **Architectural Governance**: Autonomously enforces industry best practices—such as proper table partitioning and structured Medallion layering.
 
 The primary purpose of this codelab is to **demonstrate the DE Agent in action**. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using the highly regarded **Medallion (layered) data approach**. 
 

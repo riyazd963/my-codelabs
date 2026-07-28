@@ -47,7 +47,7 @@ Our data environment is structured into specific layers and domains as follows:
 | Layer / Purpose | Project ID | Dataset | Table Name |
 | :--- | :--- | :--- | :--- |
 | **Source (Raw SAP)** | `Your_GCP_ProjectID` | `input_layer` | `actual_sales` |
-| **Target (Medallion)** | `Your_GCP_ProjectID` | `final_layer` | `actual_sales_step1` through `step4` |
+| **Target (Medallion)** | `Your_GCP_ProjectID` | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3` |
 | **Master Data** | `Your_GCP_ProjectID` | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` |
 | **Text Enrichment** | `Your_GCP_ProjectID` | `sap_text` | `kna1`, `but000`, `t077x` |
 

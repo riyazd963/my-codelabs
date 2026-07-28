@@ -210,7 +210,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
 
 
 ### Test 1: Full Inner Join Traceability
-This test verifies whether transactional facts correctly map to their descriptive dimensions. By using strict `INNER JOIN` conditions, any transaction missing a corresponding master data record will be automatically excluded, immediately highlighting data integrity issues.
+This query simulates a standard reporting view by joining the raw sales data with the master data tables. We use `INNER JOIN`s to ensure that we only extract sales records that have complete and matching master data dimensions (such as material, plant, and customer details). This provides a clean, unified view of our raw input data.
 
 ```sql
 SELECT
@@ -248,10 +248,14 @@ INNER JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
 ORDER BY s.record ASC;
 ```
 
-### Test 2: Relational Integrity Check
-While the previous test drops invalid rows, this diagnostic script relies on `LEFT JOIN` mechanics combined with `COUNTIF` checks to quickly isolate and flag unmatched foreign key footprints without removing them. 
+**Expected Result:**
+![Expected Result](img/ss_test1.png)
 
-> **Success Evaluation Criterion:** For a perfectly synchronized environment, every diagnostic `missing_*_matches` indicator count metric output **must read exactly 0**.
+
+### Test 2: Relational Integrity Check
+This diagnostic query validates the relational integrity of our mock data. By using a `LEFT JOIN` from the sales table to all master data tables, combined with `COUNTIF` statements, it counts how many sales records are missing corresponding dimensional data. 
+
+> **Expected Result:** Since we just generated synchronized mock data, every diagnostic `missing_*_matches` count should output exactly **0**.
 
 ```sql
 SELECT
@@ -277,6 +281,9 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
 LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = '012' AND t.SPRAS = 'E';
 ```
+
+**Expected Result:**
+![Expected Result](img/ss_test2.png)
 
 ---
 

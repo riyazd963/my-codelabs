@@ -241,7 +241,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
     
       <google-codelab-step label="Verification &amp; Validation Testing" duration="0">
         <h2 is-upgraded>Test 1: Full Inner Join Traceability</h2>
-<p>This test verifies whether transactional facts correctly map to their descriptive dimensions. By using strict <code>INNER JOIN</code> conditions, any transaction missing a corresponding master data record will be automatically excluded, immediately highlighting data integrity issues.</p>
+<p>This query simulates a standard reporting view by joining the raw sales data with the master data tables. We use <code>INNER JOIN</code>s to ensure that we only extract sales records that have complete and matching master data dimensions (such as material, plant, and customer details). This provides a clean, unified view of our raw input data.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   -- Transactional Data
   s.record,
@@ -276,9 +276,10 @@ INNER JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;
 ORDER BY s.record ASC;
 </code></pre>
+<p><strong>Expected Result:</strong><img alt="Expected Result" src="img/d8c4419e64756601.png"></p>
 <h2 is-upgraded>Test 2: Relational Integrity Check</h2>
-<p>While the previous test drops invalid rows, this diagnostic script relies on <code>LEFT JOIN</code> mechanics combined with <code>COUNTIF</code> checks to quickly isolate and flag unmatched foreign key footprints without removing them.</p>
-<p><strong>Success Evaluation Criterion:</strong> For a perfectly synchronized environment, every diagnostic <code>missing_*_matches</code> indicator count metric output <strong>must read exactly 0</strong>.</p>
+<p>This diagnostic query validates the relational integrity of our mock data. By using a <code>LEFT JOIN</code> from the sales table to all master data tables, combined with <code>COUNTIF</code> statements, it counts how many sales records are missing corresponding dimensional data.</p>
+<p><strong>Expected Result:</strong> Since we just generated synchronized mock data, every diagnostic <code>missing_*_matches</code> count should output exactly <strong>0</strong>.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   COUNT(*) AS total_sales_records,
   -- A count &gt; 0 indicates missing joining keys in the specified dimension!
@@ -302,6 +303,7 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
 LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;;
 </code></pre>
+<p><strong>Expected Result:</strong><img alt="Expected Result" src="img/d8c4419e64756601.png"></p>
 
 
       </google-codelab-step>

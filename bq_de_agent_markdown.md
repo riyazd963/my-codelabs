@@ -287,7 +287,7 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
 
 ---
 
-## Supplemental Guide: Production Dataform Framework & Modules
+## Setting up Data Engineering Agent
 In modern data engineering, managing SQL scripts manually is prone to error and difficult to track. This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using **Google Cloud Dataform**, a service designed to manage data transformations in BigQuery.
 
 ### Part 1: The Production Framework (Standards & Protocol)

@@ -55,7 +55,7 @@ Take a moment to familiarize yourself with these datasets. The `input_layer` act
 
 ---
 
-## Step 1: Environment Cleanup
+## Environment Cleanup
 To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.
 
 By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.
@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 ```
 
-## Step 2: Schema definition
+## Schema definition
 With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables. 
 
 Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).
@@ -143,7 +143,7 @@ CREATE TABLE `Your_GCP_ProjectID.input_layer.actual_sales` (
 ```
 
 
-## Step 3: Populate Mock Data
+## Populate Mock Data
 Developing and testing data pipelines often requires realistic datasets. However, relying on production data during development poses security risks and operational bottlenecks. 
 
 To bypass this, we will use BigQuery's powerful array generation mechanics (`UNNEST(GENERATE_ARRAY(...))`) to synthetically construct mock transaction history and master data. This ensures we have a fully functional, self-contained test environment.
@@ -206,7 +206,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
 
 ---
 
-## Step 4: Verification & Validation Testing
+## Verification & Validation Testing
 Before migrating data upstream into our Medallion layer updates (`actual_sales_step1` through `step4`), data engineers must ensure zero relational drift. Missing foreign keys or duplicate records can cause downstream reporting errors. We accomplish this using two core testing patterns.
 
 ### Test 1: Full Inner Join Traceability
@@ -286,13 +286,13 @@ In modern data engineering, managing SQL scripts manually is prone to error and 
 ### Part 1: The Production Framework (Standards & Protocol)
 All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors to maintain code quality.
 
-### Step 1: Open BigQuery in GCP Console
+### Open BigQuery in GCP Console
 Navigate to the Google Cloud Console, select your project, and open the **BigQuery** console from the navigation menu.
 In the BigQuery explorer sidebar, look for the **Pipelines** dropdown menu. Click the three dots (options menu) next to Pipelines and select **Create pipeline**.
 
 <img src="img/ss1.png" alt="GCP BigQuery Navigation" width="400">
 
-### Step 2: Rename Pipeline and Start Agent
+### Rename Pipeline and Start Agent
 Organization is key. Rename the pipeline from **Untitled pipeline** to a descriptive name, such as **DE_Agent_Pipeline**. Once renamed, click on `Ask Agent` in the top menu to initiate our AI-assisted workflow.
 
 <img src="img/ss2.png" alt="Create Pipeline Context Menu" width="400">

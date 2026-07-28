@@ -94,7 +94,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 1: Environment Cleanup" duration="0">
+      <google-codelab-step label="Environment Cleanup" duration="0">
         <p>To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.</p>
 <p>By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.</p>
 <p>Run the following standard BigQuery SQL commands in your workspace:</p>
@@ -113,7 +113,7 @@ DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 2: Schema definition" duration="0">
+      <google-codelab-step label="Schema definition" duration="0">
         <p>With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables.</p>
 <p>Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).</p>
 <p>Execute these DDL statements to construct your database structures:</p>
@@ -179,7 +179,7 @@ CREATE TABLE `Your_GCP_ProjectID.input_layer.actual_sales` (
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 3: Populate Mock Data" duration="0">
+      <google-codelab-step label="Populate Mock Data" duration="0">
         <p>Developing and testing data pipelines often requires realistic datasets. However, relying on production data during development poses security risks and operational bottlenecks.</p>
 <p>To bypass this, we will use BigQuery&#39;s powerful array generation mechanics (<code>UNNEST(GENERATE_ARRAY(...))</code>) to synthetically construct mock transaction history and master data. This ensures we have a fully functional, self-contained test environment.</p>
 <p>Execute the following script to systematically generate 100 synchronized entities across all domains:</p>
@@ -239,7 +239,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
 
       </google-codelab-step>
     
-      <google-codelab-step label="Step 4: Verification &amp; Validation Testing" duration="0">
+      <google-codelab-step label="Verification &amp; Validation Testing" duration="0">
         <p>Before migrating data upstream into our Medallion layer updates (<code>actual_sales_step1</code> through <code>step4</code>), data engineers must ensure zero relational drift. Missing foreign keys or duplicate records can cause downstream reporting errors. We accomplish this using two core testing patterns.</p>
 <h2 is-upgraded>Test 1: Full Inner Join Traceability</h2>
 <p>This test verifies whether transactional facts correctly map to their descriptive dimensions. By using strict <code>INNER JOIN</code> conditions, any transaction missing a corresponding master data record will be automatically excluded, immediately highlighting data integrity issues.</p>
@@ -311,10 +311,10 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
         <p>In modern data engineering, managing SQL scripts manually is prone to error and difficult to track. This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using <strong>Google Cloud Dataform</strong>, a service designed to manage data transformations in BigQuery.</p>
 <h2 is-upgraded>Part 1: The Production Framework (Standards &amp; Protocol)</h2>
 <p>All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors to maintain code quality.</p>
-<h2 is-upgraded>Step 1: Open BigQuery in GCP Console</h2>
+<h2 is-upgraded>Open BigQuery in GCP Console</h2>
 <p>Navigate to the Google Cloud Console, select your project, and open the <strong>BigQuery</strong> console from the navigation menu. In the BigQuery explorer sidebar, look for the <strong>Pipelines</strong> dropdown menu. Click the three dots (options menu) next to Pipelines and select <strong>Create pipeline</strong>.</p>
 <p class="image-container"><img alt="GCP BigQuery Navigation" style="width: 400.00px" src="img/d8c4419e64756601.png"></p>
-<h2 is-upgraded>Step 2: Rename Pipeline and Start Agent</h2>
+<h2 is-upgraded>Rename Pipeline and Start Agent</h2>
 <p>Organization is key. Rename the pipeline from <strong>Untitled pipeline</strong> to a descriptive name, such as <strong>DE_Agent_Pipeline</strong>. Once renamed, click on <code>Ask Agent</code> in the top menu to initiate our AI-assisted workflow.</p>
 <p class="image-container"><img alt="Create Pipeline Context Menu" style="width: 400.00px" src="img/febdad90c968c81c.png"></p>
 <p>A prompt window will open at the bottom of the screen. Click on <code>Pipeline instructions</code> to open a new context window with the filename <code>GEMINI.md</code>. This is where we define the rules for our agent.</p>

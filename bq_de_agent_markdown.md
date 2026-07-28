@@ -11,30 +11,30 @@ feedback link: https://github.com/your-repo/issues
 ## Overview
 Welcome to this comprehensive course showcasing the capabilities of the **Data Engineering (DE) Agent** in Google Cloud! 
 
-**The Origin of the DE Agent**
-Recently introduced as a core pillar of Google Cloud's AI-driven data ecosystem, the DE Agent is deeply powered by Google's state-of-the-art Gemini foundational models. Born out of the need to reduce the operational overhead on data engineering teams, it was built specifically to understand deep data contexts, enterprise schemas, and complex transformation logic. By integrating directly into the BigQuery and Dataform workspaces, it bridges the gap between high-level business logic and low-level pipeline execution.
+**The Origin of the Data Engineering Agent**
+Recently introduced as a core pillar of Google Cloud's AI-driven data ecosystem, the Data Engineering Agent is deeply powered by Google's state-of-the-art Gemini foundational models. Born out of the need to reduce the operational overhead on data engineering teams, it was built specifically to understand deep data contexts, enterprise schemas, and complex transformation logic. By integrating directly into the BigQuery and Dataform workspaces, it bridges the gap between high-level business logic and low-level pipeline execution.
 
-**Core Capabilities of the DE Agent**
-The DE Agent is designed to revolutionize how data professionals build, manage, and scale data pipelines. Its robust capabilities include:
+**Core Capabilities of the Data Engineering Agent**
+The Data Engineering Agent is designed to revolutionize how data professionals build, manage, and scale data pipelines. Its robust capabilities include:
 * **Natural Language to Pipeline Code**: Seamlessly translates plain-English requirements into production-grade SQL and complex Dataform configurations.
 * **Context-Aware Schema Operations**: Intelligently analyzes existing table structures to autonomously determine optimal join keys, cast data types, and apply transformations without manual mapping.
 * **Automated Data Quality & Assertions**: Proactively generates and enforces data quality checks (such as null-checks and uniqueness) to maintain downstream data integrity.
 * **Pipeline Debugging and Course Correction**: Capable of ingesting error logs and user feedback to dynamically refactor and fix broken SQL logic on the fly.
 * **Architectural Governance**: Autonomously enforces industry best practices—such as proper table partitioning and structured Medallion layering.
 
-The primary purpose of this codelab is to **demonstrate the DE Agent in action**. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using the highly regarded **Medallion (layered) data approach**. 
+The primary purpose of this codelab is to **demonstrate the Data Engineering Agent in action**. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using the highly regarded **Medallion (layered) data approach**. 
 
-By establishing a baseline environment and then prompting the DE Agent, we will guide you step-by-step through:
+By establishing a baseline environment and then prompting the Data Engineering Agent, we will guide you step-by-step through:
 1. Safely cleaning up and initializing our foundational data environment.
 2. Generating synthetic mock data and preparing the initial source schemas.
-3. Utilizing the DE Agent to systematically generate Dataform pipeline modules (from Bronze to Gold layers).
+3. Utilizing the Data Engineering Agent to systematically generate Dataform pipeline modules (from Bronze to Gold layers).
 4. Iteratively refining pipelines, validating integrity, and enforcing data quality through AI-assisted engineering.
 
 ### What You'll Learn
-* **AI-Assisted Data Engineering**: How to effectively interact with the DE Agent using modular prompts to generate complex data pipelines.
-* **Agent Capabilities**: Discover what the DE Agent can do—from automated schema transformations and data standardization to intelligent table joins and logic corrections.
-* **Medallion Architecture**: Using the DE Agent to build scalable Bronze, Silver, and Gold data layers in BigQuery.
-* **Production Dataform Frameworks**: Implementing the DE Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.
+* **AI-Assisted Data Engineering**: How to effectively interact with the Data Engineering Agent using modular prompts to generate complex data pipelines.
+* **Agent Capabilities**: Discover what the Data Engineering Agent can do—from automated schema transformations and data standardization to intelligent table joins and logic corrections.
+* **Medallion Architecture**: Using the Data Engineering Agent to build scalable Bronze, Silver, and Gold data layers in BigQuery.
+* **Production Dataform Frameworks**: Implementing the Data Engineering Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.
 * **Prompt Engineering for DE**: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.
 
 ---

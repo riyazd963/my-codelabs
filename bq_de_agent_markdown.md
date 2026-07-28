@@ -56,7 +56,7 @@ Take a moment to familiarize yourself with these datasets. The `input_layer` act
 ---
 
 ## Step 1: Environment Cleanup
-In data engineering, idempotency—the ability to run a script multiple times and achieve the same result—is a core principle. To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.
+To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.
 
 By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.
 

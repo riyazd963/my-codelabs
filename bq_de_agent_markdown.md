@@ -44,12 +44,12 @@ Before we begin writing any code, it is critical to understand the layout of our
 
 Our data environment is structured into specific layers and domains as follows:
 
-| Layer / Purpose | Project ID | Dataset | Table Name |
+| Layer / Purpose | Dataset | Table Name | Description |
 | :--- | :--- | :--- | :--- |
-| **Source (Raw SAP)** | `Your_GCP_ProjectID` | `input_layer` | `actual_sales` |
-| **Target (Medallion)** | `Your_GCP_ProjectID` | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3` |
-| **Master Data** | `Your_GCP_ProjectID` | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` |
-| **Text Enrichment** | `Your_GCP_ProjectID` | `sap_text` | `kna1`, `but000`, `t077x` |
+| **Source (Raw SAP)** | `input_layer` | `actual_sales` | Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational Bronze layer for our pipeline. |
+| **Target (Medallion)** | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3` | Holds the refined, enriched, and aggregated sales models.<br>Represents the Silver and Gold tiers for business reporting. |
+| **Master Data** | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` | Stores key dimensional attributes for materials, plants, and customers.<br>Used to enrich raw transactions with contextual meaning. |
+| **Text Enrichment** | `sap_text` | `kna1`, `but000`, `t077x` | Provides human-readable localization strings and text descriptions.<br>Ensures that final reports are easily understood by business users. |
 
 Take a moment to familiarize yourself with these datasets. The `input_layer` acts as our Bronze layer, capturing raw data, while the `final_layer` will serve as our refined Silver/Gold layers.
 

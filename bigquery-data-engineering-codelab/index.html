@@ -64,29 +64,29 @@
 <p>Our data environment is structured into specific layers and domains as follows:</p>
 <table>
 <tr><td colspan="1" rowspan="1"><p>Layer / Purpose</p>
-</td><td colspan="1" rowspan="1"><p>Project ID</p>
 </td><td colspan="1" rowspan="1"><p>Dataset</p>
 </td><td colspan="1" rowspan="1"><p>Table Name</p>
+</td><td colspan="1" rowspan="1"><p>Description</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Source (Raw SAP)</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>input_layer</code></p>
 </td><td colspan="1" rowspan="1"><p><code>actual_sales</code></p>
+</td><td colspan="1" rowspan="1"><p>Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational Bronze layer for our pipeline.</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Target (Medallion)</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>final_layer</code></p>
 </td><td colspan="1" rowspan="1"><p><code>actual_sales_step1</code>, <code>actual_sales_step2</code>, <code>actual_sales_step3</code></p>
+</td><td colspan="1" rowspan="1"><p>Holds the refined, enriched, and aggregated sales models.<br>Represents the Silver and Gold tiers for business reporting.</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Master Data</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>sap_master</code></p>
 </td><td colspan="1" rowspan="1"><p><code>MaterialMD</code>, <code>PlantMD</code>, <code>CustomerMD</code></p>
+</td><td colspan="1" rowspan="1"><p>Stores key dimensional attributes for materials, plants, and customers.<br>Used to enrich raw transactions with contextual meaning.</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Text Enrichment</strong></p>
-</td><td colspan="1" rowspan="1"><p><code>Your_GCP_ProjectID</code></p>
 </td><td colspan="1" rowspan="1"><p><code>sap_text</code></p>
 </td><td colspan="1" rowspan="1"><p><code>kna1</code>, <code>but000</code>, <code>t077x</code></p>
+</td><td colspan="1" rowspan="1"><p>Provides human-readable localization strings and text descriptions.<br>Ensures that final reports are easily understood by business users.</p>
 </td></tr>
 </table>
 <p>Take a moment to familiarize yourself with these datasets. The <code>input_layer</code> acts as our Bronze layer, capturing raw data, while the <code>final_layer</code> will serve as our refined Silver/Gold layers.</p>

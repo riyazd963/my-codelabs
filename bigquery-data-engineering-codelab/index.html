@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>Codelab: Data Engineering - Preparing Data in BigQuery</title>
+  <title>Codelab: Demonstrating the Data Engineering Agent in BigQuery</title>
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
   <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
@@ -24,26 +24,27 @@
   <google-codelab codelab-gaid=""
                   codelab-ga4id=""
                   id="bigquery-data-engineering-codelab"
-                  title="Codelab: Data Engineering - Preparing Data in BigQuery"
+                  title="Codelab: Demonstrating the Data Engineering Agent in BigQuery"
                   environment="web"
                   feedback-link="https://github.com/your-repo/issues">
     
       <google-codelab-step label="Overview" duration="0">
-        <p>Welcome to this comprehensive course on Data Engineering in Google Cloud BigQuery! In this module, you will learn how to design, set up, and validate a robust data pipeline architecture using the highly regarded <strong>Medallion (layered) data approach</strong>.</p>
-<p>The Medallion architecture organizes data into distinct layers—typically Bronze (raw), Silver (cleansed and conformed), and Gold (business-level aggregates)—ensuring data quality and logical separation of concerns. Throughout this codelab, we will guide you step-by-step through:</p>
+        <p>Welcome to this comprehensive course showcasing the capabilities of the <strong>Data Engineering (DE) Agent</strong> in Google Cloud! Recently introduced as a powerful AI-driven assistant, the DE Agent is designed to revolutionize how data professionals build, manage, and scale data pipelines. It significantly accelerates development by translating natural language instructions into production-grade SQL, managing Dataform configurations, and autonomously enforcing architectural best practices.</p>
+<p>The primary purpose of this codelab is to <strong>demonstrate the DE Agent in action</strong>. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using the highly regarded <strong>Medallion (layered) data approach</strong>.</p>
+<p>By establishing a baseline environment and then prompting the DE Agent, we will guide you step-by-step through:</p>
 <ol type="1">
-<li>Safely cleaning up existing environments to ensure a pristine deployment.</li>
-<li>Establishing rigorous relational schemas across multiple staging layers.</li>
-<li>Generating programmatic mock data to simulate real-world SAP systems.</li>
-<li>Writing key validation and integrity tests to guarantee data quality.</li>
+<li>Safely cleaning up and initializing our foundational data environment.</li>
+<li>Generating synthetic mock data and preparing the initial source schemas.</li>
+<li>Utilizing the DE Agent to systematically generate Dataform pipeline modules (from Bronze to Gold layers).</li>
+<li>Iteratively refining pipelines, validating integrity, and enforcing data quality through AI-assisted engineering.</li>
 </ol>
 <h2 class="checklist" is-upgraded>What You&#39;ll Learn</h2>
 <ul class="checklist">
-<li><strong>Architectural Best Practices</strong>: How to structure BigQuery datasets for a scalable layered data architecture.</li>
-<li><strong>State Management</strong>: Best practices for cleaning up previous database states safely and idempotently.</li>
-<li><strong>Schema Design</strong>: Defining robust BigQuery table schemas for Transactional Sources, Targets, Master Data, and Text Enrichment.</li>
-<li><strong>Data Simulation</strong>: Implementing automated mock data generation directly via standard SQL to facilitate testing.</li>
-<li><strong>Data Quality Engineering</strong>: Authoring integrity-checking queries to trace missing joining keys and validate complex data boundaries.</li>
+<li><strong>AI-Assisted Data Engineering</strong>: How to effectively interact with the DE Agent using modular prompts to generate complex data pipelines.</li>
+<li><strong>Agent Capabilities</strong>: Discover what the DE Agent can do—from automated schema transformations and data standardization to intelligent table joins and logic corrections.</li>
+<li><strong>Medallion Architecture</strong>: Using the DE Agent to build scalable Bronze, Silver, and Gold data layers in BigQuery.</li>
+<li><strong>Production Dataform Frameworks</strong>: Implementing the DE Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.</li>
+<li><strong>Prompt Engineering for DE</strong>: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.</li>
 </ul>
 
 

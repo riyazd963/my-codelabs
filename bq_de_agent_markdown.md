@@ -207,7 +207,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
 ---
 
 ## Verification & Validation Testing
-Before migrating data upstream into our Medallion layer updates (`actual_sales_step1` through `step4`), data engineers must ensure zero relational drift. Missing foreign keys or duplicate records can cause downstream reporting errors. We accomplish this using two core testing patterns.
+
 
 ### Test 1: Full Inner Join Traceability
 This test verifies whether transactional facts correctly map to their descriptive dimensions. By using strict `INNER JOIN` conditions, any transaction missing a corresponding master data record will be automatically excluded, immediately highlighting data integrity issues.

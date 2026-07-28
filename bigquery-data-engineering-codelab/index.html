@@ -240,8 +240,7 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
       </google-codelab-step>
     
       <google-codelab-step label="Verification &amp; Validation Testing" duration="0">
-        <p>Before migrating data upstream into our Medallion layer updates (<code>actual_sales_step1</code> through <code>step4</code>), data engineers must ensure zero relational drift. Missing foreign keys or duplicate records can cause downstream reporting errors. We accomplish this using two core testing patterns.</p>
-<h2 is-upgraded>Test 1: Full Inner Join Traceability</h2>
+        <h2 is-upgraded>Test 1: Full Inner Join Traceability</h2>
 <p>This test verifies whether transactional facts correctly map to their descriptive dimensions. By using strict <code>INNER JOIN</code> conditions, any transaction missing a corresponding master data record will be automatically excluded, immediately highlighting data integrity issues.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   -- Transactional Data

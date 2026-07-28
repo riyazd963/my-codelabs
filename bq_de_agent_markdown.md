@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 ```
 
-## Step 2: Create DDL Schemas
+## Step 2: Schema definition
 With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables. 
 
 Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).

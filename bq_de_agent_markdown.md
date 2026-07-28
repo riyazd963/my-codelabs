@@ -255,18 +255,18 @@ ORDER BY s.record ASC;
 ### Test 2: Relational Integrity Check
 This diagnostic query validates the relational integrity of our mock data. By using a `LEFT JOIN` from the sales table to all master data tables, combined with `COUNTIF` statements, it counts how many sales records are missing corresponding dimensional data. 
 
-> **Expected Result:** Since we just generated synchronized mock data, every diagnostic `missing_*_matches` count should output exactly **0**.
+> **Expected Result:** To demonstrate how the agent identifies data drift, our mock data generation intentionally omits a few master data records. You should see `1` for `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`, highlighting that these foreign key constraints have been violated. 
 
 ```sql
 SELECT
   COUNT(*) AS total_sales_records,
   -- A count > 0 indicates missing joining keys in the specified dimension!
-  COUNTIF(m.Material_MATERIAL IS NULL) AS missing_material_matches,
-  COUNTIF(p.Plant_PLANT IS NULL) AS missing_plant_matches,
-  COUNTIF(c.CustomerNumber_KUNNR IS NULL) AS missing_customer_matches,
-  COUNTIF(k.KUNNR IS NULL) AS missing_kna1_text_matches,
-  COUNTIF(b.PARTNER IS NULL) AS missing_but000_text_matches,
-  COUNTIF(t.KTOKD IS NULL) AS missing_t077x_text_matches
+  COUNTIF(m.Material_MATERIAL IS NULL) AS MISSING_MATERIAL_KEYS,
+  COUNTIF(p.Plant_PLANT IS NULL) AS MISSING_PLANT_KEYS,
+  COUNTIF(c.CustomerNumber_KUNNR IS NULL) AS MISSING_CUSTOMER_KEYS,
+  COUNTIF(k.KUNNR IS NULL) AS MISSING_KNA1_TEXT_KEYS,
+  COUNTIF(b.PARTNER IS NULL) AS MISSING_BUT000_TEXT_KEYS,
+  COUNTIF(t.KTOKD IS NULL) AS MISSING_T077X_TEXT_KEYS
 FROM `Your_GCP_ProjectID.input_layer.actual_sales` AS s
 LEFT JOIN `Your_GCP_ProjectID.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = 'E'

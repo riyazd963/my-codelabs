@@ -279,16 +279,16 @@ ORDER BY s.record ASC;
 <p><strong>Expected Result:</strong><img alt="Expected Result" src="img/fb6e0f8b71453ec1.png"></p>
 <h2 is-upgraded>Test 2: Relational Integrity Check</h2>
 <p>This diagnostic query validates the relational integrity of our mock data. By using a <code>LEFT JOIN</code> from the sales table to all master data tables, combined with <code>COUNTIF</code> statements, it counts how many sales records are missing corresponding dimensional data.</p>
-<p><strong>Expected Result:</strong> Since we just generated synchronized mock data, every diagnostic <code>missing_*_matches</code> count should output exactly <strong>0</strong>.</p>
+<p><strong>Expected Result:</strong> To demonstrate how the agent identifies data drift, our mock data generation intentionally omits a few master data records. You should see <code>1</code> for <code>MISSING_MATERIAL_KEYS</code> and <code>MISSING_PLANT_KEYS</code>, highlighting that these foreign key constraints have been violated.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   COUNT(*) AS total_sales_records,
   -- A count &gt; 0 indicates missing joining keys in the specified dimension!
-  COUNTIF(m.Material_MATERIAL IS NULL) AS missing_material_matches,
-  COUNTIF(p.Plant_PLANT IS NULL) AS missing_plant_matches,
-  COUNTIF(c.CustomerNumber_KUNNR IS NULL) AS missing_customer_matches,
-  COUNTIF(k.KUNNR IS NULL) AS missing_kna1_text_matches,
-  COUNTIF(b.PARTNER IS NULL) AS missing_but000_text_matches,
-  COUNTIF(t.KTOKD IS NULL) AS missing_t077x_text_matches
+  COUNTIF(m.Material_MATERIAL IS NULL) AS MISSING_MATERIAL_KEYS,
+  COUNTIF(p.Plant_PLANT IS NULL) AS MISSING_PLANT_KEYS,
+  COUNTIF(c.CustomerNumber_KUNNR IS NULL) AS MISSING_CUSTOMER_KEYS,
+  COUNTIF(k.KUNNR IS NULL) AS MISSING_KNA1_TEXT_KEYS,
+  COUNTIF(b.PARTNER IS NULL) AS MISSING_BUT000_TEXT_KEYS,
+  COUNTIF(t.KTOKD IS NULL) AS MISSING_T077X_TEXT_KEYS
 FROM `Your_GCP_ProjectID.input_layer.actual_sales` AS s
 LEFT JOIN `Your_GCP_ProjectID.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = &#39;E&#39;
@@ -303,7 +303,7 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
 LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;;
 </code></pre>
-<p><strong>Expected Result:</strong><img alt="Expected Result" src="img/d8c4419e64756601.png"></p>
+<p><strong>Expected Result:</strong><img alt="Expected Result" src="img/c86a19f704126f7d.png"></p>
 
 
       </google-codelab-step>

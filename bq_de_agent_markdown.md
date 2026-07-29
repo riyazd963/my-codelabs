@@ -30,7 +30,7 @@ By establishing a baseline environment and then prompting the Data Engineering A
 3. Utilizing the Data Engineering Agent to systematically generate Dataform pipeline modules (from Bronze to Gold layers).
 4. Iteratively refining pipelines, validating integrity, and enforcing data quality through AI-assisted engineering.
 
-### What You'll Learn
+## What You'll Learn
 * **AI-Assisted Data Engineering**: How to effectively interact with the Data Engineering Agent using modular prompts to generate complex data pipelines.
 * **Agent Capabilities**: Discover what the Data Engineering Agent can do—from automated schema transformations and data standardization to intelligent table joins and logic corrections.
 * **Medallion Architecture**: Using the Data Engineering Agent to build scalable Bronze, Silver, and Gold data layers in BigQuery.

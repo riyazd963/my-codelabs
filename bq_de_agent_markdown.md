@@ -457,7 +457,7 @@ The agent applies the requested corrections, yielding a precise and compliant tr
 
 ---
 
-## Additional Content & Advanced Prompting
+## Alternative prompting method
 As you become more comfortable navigating Dataform with an AI agent, you can begin feeding it more holistic, multi-step instructions. Below is an example of an advanced, comprehensive prompt that dictates the entire pipeline architecture in one go.
 
 While single, large prompts can be highly efficient, they may require careful tuning to ensure the agent captures every nuance without hallucinations.

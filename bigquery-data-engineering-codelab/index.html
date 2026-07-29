@@ -117,7 +117,7 @@ DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
 
       </google-codelab-step>
     
-      <google-codelab-step label="Schema definition" duration="0">
+      <google-codelab-step label="Schema Definition" duration="0">
         <p>With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables.</p>
 <p>Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).</p>
 <p>Execute these DDL statements to construct your database structures:</p>
@@ -312,7 +312,7 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
 
       </google-codelab-step>
     
-      <google-codelab-step label="Setting up Data Engineering Agent" duration="0">
+      <google-codelab-step label="Setting Up Data Engineering Agent" duration="0">
         <p>In modern data engineering, managing SQL scripts manually is prone to error and difficult to track. This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using <strong>Google Cloud Dataform</strong>, a service designed to manage data transformations in BigQuery.</p>
 <h2 is-upgraded>Part 1: The Production Framework (Standards &amp; Protocol)</h2>
 <p>All subsequent Dataform modules must adhere strictly to the following architectural standards and execution behaviors to maintain code quality.</p>
@@ -447,7 +447,7 @@ Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate r
 
       </google-codelab-step>
     
-      <google-codelab-step label="Alternative prompting method" duration="0">
+      <google-codelab-step label="Alternative Prompting Method" duration="0">
         <p>As you become more comfortable navigating Dataform with an AI agent, you can begin feeding it more holistic, multi-step instructions. Below is an example of an advanced, comprehensive prompt that dictates the entire pipeline architecture in one go.</p>
 <p>While single, large prompts can be highly efficient, they may require careful tuning to ensure the agent captures every nuance without hallucinations.</p>
 <h2 is-upgraded>Advanced Single Prompt Example</h2>

@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 ```
 
-## Schema definition
+## Schema Definition
 With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables. 
 
 Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).
@@ -287,7 +287,7 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
 
 ---
 
-## Setting up Data Engineering Agent
+## Setting Up Data Engineering Agent
 In modern data engineering, managing SQL scripts manually is prone to error and difficult to track. This section outlines the governance framework and specific script configurations required to modernize and enrich SAP BW tables using **Google Cloud Dataform**, a service designed to manage data transformations in BigQuery.
 
 ### Part 1: The Production Framework (Standards & Protocol)
@@ -457,7 +457,7 @@ The agent applies the requested corrections, yielding a precise and compliant tr
 
 ---
 
-## Alternative prompting method
+## Alternative Prompting Method
 As you become more comfortable navigating Dataform with an AI agent, you can begin feeding it more holistic, multi-step instructions. Below is an example of an advanced, comprehensive prompt that dictates the entire pipeline architecture in one go.
 
 While single, large prompts can be highly efficient, they may require careful tuning to ensure the agent captures every nuance without hallucinations.

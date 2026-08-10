@@ -37,6 +37,12 @@ By establishing a baseline environment and then prompting the Data Engineering A
 * **Production Dataform Frameworks**: Implementing the Data Engineering Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.
 * **Prompt Engineering for DE**: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.
 
+### 🛑 Important Prerequisite: Set Your Project ID
+Throughout this codelab, you will see the placeholder `<YOUR_PROJECT_ID>` in SQL queries and configuration files. 
+
+**Before running any code block:** 
+We highly recommend copying the scripts into a text editor (like Notepad, VS Code, or a new BigQuery SQL tab) and running a quick **Find & Replace All** to swap `<YOUR_PROJECT_ID>` with your actual Google Cloud Project ID. 
+
 ---
 
 ## Environment Architecture Overview
@@ -65,13 +71,13 @@ Run the following standard BigQuery SQL commands in your workspace:
 ```sql
 -- 1. CLEANUP: Resetting the environment to a pristine state
 -----------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.input_layer.actual_sales`;
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_master.MaterialMD`;
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_master.CustomerMD`;
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_master.PlantMD`;
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.kna1`;
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.but000`;
-DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.input_layer.actual_sales`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_master.MaterialMD`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_master.CustomerMD`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_master.PlantMD`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_text.kna1`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_text.but000`;
+DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 ```
 
@@ -84,10 +90,10 @@ Each schema is tailored to handle specific data grain domains—ranging from tra
 Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets. *(Note: If these datasets are already present in your project, you can skip this step).*
 
 ```sql
-CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.input_layer`;
-CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.sap_master`;
-CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.sap_text`;
-CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.final_layer`;
+CREATE SCHEMA IF NOT EXISTS `<YOUR_PROJECT_ID>.input_layer`;
+CREATE SCHEMA IF NOT EXISTS `<YOUR_PROJECT_ID>.sap_master`;
+CREATE SCHEMA IF NOT EXISTS `<YOUR_PROJECT_ID>.sap_text`;
+CREATE SCHEMA IF NOT EXISTS `<YOUR_PROJECT_ID>.final_layer`;
 ```
 
 ### Create Tables
@@ -98,7 +104,7 @@ Execute these DDL statements to construct your database structures:
 -----------------------------------------------------------------------------------------
 
 -- MATERIAL MASTER DATA
-CREATE TABLE `Your_GCP_ProjectID.sap_master.MaterialMD` (
+CREATE TABLE `<YOUR_PROJECT_ID>.sap_master.MaterialMD` (
   Material_MATERIAL STRING, LanguageKey STRING, Material_MATERIAL_T STRING, MaterialType_MATL_TYPE STRING, MaterialGroup_MATL_GROUP STRING,
   BaseUnit STRING, GrossWeight NUMERIC, NetWeight NUMERIC, WeightUnit STRING, Volume NUMERIC, VolumeUnit STRING, IndustrySector STRING,
   CreatedBy STRING, CreatedOn DATE, ChangedBy STRING, LastChangedOn DATE, Division STRING, ProductHierarchy STRING, Brand STRING,
@@ -106,7 +112,7 @@ CREATE TABLE `Your_GCP_ProjectID.sap_master.MaterialMD` (
 );
 
 -- CUSTOMER MASTER DATA
-CREATE TABLE `Your_GCP_ProjectID.sap_master.CustomerMD` (
+CREATE TABLE `<YOUR_PROJECT_ID>.sap_master.CustomerMD` (
   Client_MANDT STRING, CustomerNumber_KUNNR STRING, Name1_NAME1 STRING, Name2_NAME2 STRING, CountryKey_LAND1 STRING,
   City_ORT01 STRING, PostalCode_PSTLZ STRING, Region_REGIO STRING, Street_STRAS STRING, Phone_TELF1 STRING, Fax_TELFX STRING,
   AccountGroup_KTOKD STRING, Industry_BRSCH STRING, CreatedOn_ERDAT DATE, CreatedBy_ERNAM STRING, DeletionFlag_LOEVM STRING,
@@ -115,7 +121,7 @@ CREATE TABLE `Your_GCP_ProjectID.sap_master.CustomerMD` (
 );
 
 -- PLANT MASTER DATA
-CREATE TABLE `Your_GCP_ProjectID.sap_master.PlantMD` (
+CREATE TABLE `<YOUR_PROJECT_ID>.sap_master.PlantMD` (
   Plant_PLANT STRING, LanguageKey STRING, Plant_PLANT_T STRING, FactoryCalendar STRING, Name2 STRING, HouseNum STRING,
   Street STRING, PoBox STRING, PostalCode STRING, City STRING, Country STRING, Region STRING, TaxJurisdiction STRING,
   PurchasingOrg STRING, SalesOrg STRING, DistChannel STRING, Division STRING, Category STRING, BatchMgmt STRING,
@@ -123,27 +129,27 @@ CREATE TABLE `Your_GCP_ProjectID.sap_master.PlantMD` (
 );
 
 -- TEXT ENRICHMENT TABLES
-CREATE TABLE `Your_GCP_ProjectID.sap_text.kna1` (
+CREATE TABLE `<YOUR_PROJECT_ID>.sap_text.kna1` (
   MANDT STRING, KUNNR STRING, NAME1 STRING, LAND1 STRING, ORT01 STRING, PSTLZ STRING, REGIO STRING, STRAS STRING, TELF1 STRING, TELFX STRING,
   KTOKD STRING, BRSCH STRING, ERDAT DATE, ERNAM STRING, LOEVM STRING, STCD1 STRING, STCD2 STRING, SPRAS STRING, VBUND STRING, STCEG STRING,
   NIELS STRING, ORT02 STRING, KUKLA STRING, BEGRU STRING, ADRNR STRING
 );
 
-CREATE TABLE `Your_GCP_ProjectID.sap_text.but000` (
+CREATE TABLE `<YOUR_PROJECT_ID>.sap_text.but000` (
   CLIENT STRING, PARTNER STRING, TYPE STRING, BP_CATEGORY STRING, BP_GROUP STRING, NAME_ORG1 STRING, NAME_ORG2 STRING,
   NAME_LAST STRING, NAME_FIRST STRING, TITLE STRING, LANGU STRING, SEARCHTERM1 STRING, SEARCHTERM2 STRING,
   BIRTH_DATE DATE, VALID_FROM DATE, VALID_TO DATE, NATION STRING, HOUSE_NUM STRING, STREET STRING, CITY STRING,
   POSTAL_CODE STRING, COUNTRY STRING, REGION STRING, TEL_NUMBER STRING, SMTP_ADDR STRING
 );
 
-CREATE TABLE `Your_GCP_ProjectID.sap_text.t077x` (
+CREATE TABLE `<YOUR_PROJECT_ID>.sap_text.t077x` (
   MANDT STRING, SPRAS STRING, KTOKD STRING, TXT30 STRING, TXT15 STRING,
   F1 STRING, F2 STRING, F3 STRING, F4 STRING, F5 STRING, F6 STRING, F7 STRING, F8 STRING, F9 STRING, F10 STRING,
   F11 STRING, F12 STRING, F13 STRING, F14 STRING, F15 STRING, F16 STRING, F17 STRING, F18 STRING, F19 STRING, F20 STRING, F21 STRING
 );
 
 -- TRANSACTIONAL INPUT LAYER
-CREATE TABLE `Your_GCP_ProjectID.input_layer.actual_sales` (
+CREATE TABLE `<YOUR_PROJECT_ID>.input_layer.actual_sales` (
   record INT64, doc_number STRING, material STRING, sold_to STRING, plant STRING, cust_class STRING, calday DATE,
   _bic_bill_date DATE, bic_inv_bkd NUMERIC, _s_ord_item STRING, _bic_bill_item STRING, doc_currcy STRING,
   fiscper STRING, fiscyear STRING, salesorg STRING, distr_chan STRING, division STRING,
@@ -166,36 +172,36 @@ Execute the following script to systematically generate 100 synchronized entitie
 -----------------------------------------------------------------------------------------
 
 -- Populate Material Master (IDs: MAT-100 to MAT-199)
-INSERT INTO `Your_GCP_ProjectID.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
+INSERT INTO `<YOUR_PROJECT_ID>.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
 SELECT CONCAT('MAT-', CAST(i AS STRING)), 'E', CONCAT('Material ', CAST(i AS STRING)), CAST(10.5 + i AS NUMERIC), CAST(9.0 + i AS NUMERIC), 'KG'
 FROM UNNEST(GENERATE_ARRAY(100, 199)) AS i;
 
 -- Populate Customer Master (IDs: CUST-1001 to CUST-1100)
-INSERT INTO `Your_GCP_ProjectID.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
+INSERT INTO `<YOUR_PROJECT_ID>.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
 SELECT '012', CONCAT('CUST-', CAST(i AS STRING)), CONCAT('Cust Name ', CAST(i AS STRING)), 'US', '0001'
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate Plant Master (IDs: PLNT-10 to PLNT-109)
-INSERT INTO `Your_GCP_ProjectID.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
+INSERT INTO `<YOUR_PROJECT_ID>.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
 SELECT CONCAT('PLNT-', CAST(i AS STRING)), 'E', CONCAT('Plant Hub ', CAST(i AS STRING)), 'US'
 FROM UNNEST(GENERATE_ARRAY(10, 109)) AS i;
 
 -- Populate KNA1 Customer Localization Text
-INSERT INTO `Your_GCP_ProjectID.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
+INSERT INTO `<YOUR_PROJECT_ID>.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
 SELECT '012', CONCAT('CUST-', CAST(i AS STRING)), CONCAT('Legal Ent ', CAST(i AS STRING)), 'US'
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate BUT000 Business Partner Context
-INSERT INTO `Your_GCP_ProjectID.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
+INSERT INTO `<YOUR_PROJECT_ID>.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
 SELECT '012', CONCAT('CUST-', CAST(i AS STRING)), CONCAT('BP Org ', CAST(i AS STRING)), 'GRP1'
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate T077X Account Group Definitions
-INSERT INTO `Your_GCP_ProjectID.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
+INSERT INTO `<YOUR_PROJECT_ID>.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
 VALUES ('012', 'E', '0001', 'Standard Customer');
 
 -- Populate Base Actual Sales Records (Mapped dynamically to valid entities)
-INSERT INTO `Your_GCP_ProjectID.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
+INSERT INTO `<YOUR_PROJECT_ID>.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
 SELECT
   i, 
   CONCAT('DOC-', CAST(5000+i AS STRING)), 
@@ -243,18 +249,18 @@ SELECT
   b.NAME_ORG1 AS business_partner_org,
   -- Account Group Text
   t.TXT30 AS account_group_desc
-FROM `Your_GCP_ProjectID.input_layer.actual_sales` AS s
-INNER JOIN `Your_GCP_ProjectID.sap_master.MaterialMD` AS m
+FROM `<YOUR_PROJECT_ID>.input_layer.actual_sales` AS s
+INNER JOIN `<YOUR_PROJECT_ID>.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = 'E'
-INNER JOIN `Your_GCP_ProjectID.sap_master.PlantMD` AS p
+INNER JOIN `<YOUR_PROJECT_ID>.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = 'E'
-INNER JOIN `Your_GCP_ProjectID.sap_master.CustomerMD` AS c
+INNER JOIN `<YOUR_PROJECT_ID>.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = '012'
-INNER JOIN `Your_GCP_ProjectID.sap_text.kna1` AS k
+INNER JOIN `<YOUR_PROJECT_ID>.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = '012'
-INNER JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
+INNER JOIN `<YOUR_PROJECT_ID>.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = '012'
-INNER JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
+INNER JOIN `<YOUR_PROJECT_ID>.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = '012' AND t.SPRAS = 'E'
 ORDER BY s.record ASC;
 ```
@@ -278,18 +284,18 @@ SELECT
   COUNTIF(k.KUNNR IS NULL) AS MISSING_KNA1_TEXT_KEYS,
   COUNTIF(b.PARTNER IS NULL) AS MISSING_BUT000_TEXT_KEYS,
   COUNTIF(t.KTOKD IS NULL) AS MISSING_T077X_TEXT_KEYS
-FROM `Your_GCP_ProjectID.input_layer.actual_sales` AS s
-LEFT JOIN `Your_GCP_ProjectID.sap_master.MaterialMD` AS m
+FROM `<YOUR_PROJECT_ID>.input_layer.actual_sales` AS s
+LEFT JOIN `<YOUR_PROJECT_ID>.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = 'E'
-LEFT JOIN `Your_GCP_ProjectID.sap_master.PlantMD` AS p
+LEFT JOIN `<YOUR_PROJECT_ID>.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = 'E'
-LEFT JOIN `Your_GCP_ProjectID.sap_master.CustomerMD` AS c
+LEFT JOIN `<YOUR_PROJECT_ID>.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = '012'
-LEFT JOIN `Your_GCP_ProjectID.sap_text.kna1` AS k
+LEFT JOIN `<YOUR_PROJECT_ID>.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = '012'
-LEFT JOIN `Your_GCP_ProjectID.sap_text.but000` AS b
+LEFT JOIN `<YOUR_PROJECT_ID>.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = '012'
-LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
+LEFT JOIN `<YOUR_PROJECT_ID>.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = '012' AND t.SPRAS = 'E';
 ```
 
@@ -320,15 +326,15 @@ A prompt window will open at the bottom of the screen. First, click on **Pipelin
 **Why GEMINI.md?**
 The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.
 
-Copy the comprehensive instruction block below into the file and save it. **Make sure to replace all instances of `Your_GCP_ProjectID` with your actual Google Cloud Project ID.** These rules ensure the agent writes code that complies with our Dataform standards:
+Copy the comprehensive instruction block below into the file and save it. **Make sure to replace all instances of `<YOUR_PROJECT_ID>` with your actual Google Cloud Project ID.** These rules ensure the agent writes code that complies with our Dataform standards:
 
 ```text
 Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the "Medallion Architecture" logic .
 Technical Context:
-Initial Source: Your_GCP_ProjectID.input_layer.actual_sales
+Initial Source: <YOUR_PROJECT_ID>.input_layer.actual_sales
 Target Dataset: final_layer
-Master Data Source: Your_GCP_ProjectID.sap_master
-Text Data Source: Your_GCP_ProjectID.sap_text
+Master Data Source: <YOUR_PROJECT_ID>.sap_master
+Text Data Source: <YOUR_PROJECT_ID>.sap_text
 Dataform Best Practices (Required for ALL scripts):
 Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's business purpose.
 Dependency Management: Exclusively use the ref() function to establish the transformation chain: Job 1 -> Job 2 -> Job 3 -> Job 4.
@@ -477,10 +483,10 @@ While single, large prompts can be highly efficient, they may require careful tu
 ```text
 Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the "Medallion Architecture" logic.
 Technical Context:
-Initial Source: Your_GCP_ProjectID.input_layer.actual_sales
+Initial Source: <YOUR_PROJECT_ID>.input_layer.actual_sales
 Target Dataset: final_layer
-Master table Sources: Your_GCP_ProjectID.sap_master and Your_GCP_ProjectID.sap_text
-Text table  Sources: Your_GCP_ProjectID.sap_master and Your_GCP_ProjectID.sap_text
+Master table Sources: <YOUR_PROJECT_ID>.sap_master and <YOUR_PROJECT_ID>.sap_text
+Text table  Sources: <YOUR_PROJECT_ID>.sap_master and <YOUR_PROJECT_ID>.sap_text
 
 Dataform Best Practices Requirements for ALL Scripts:
 Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's purpose.

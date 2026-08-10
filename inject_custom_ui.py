@@ -21,14 +21,14 @@ elif '<!-- copy-button-script -->' in content:
 # claat exports HTML entities, so <YOUR_PROJECT_ID> becomes &lt;YOUR_PROJECT_ID&gt;
 content = re.sub(
     r'&lt;YOUR_PROJECT_ID&gt;', 
-    r'<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>', 
+    r'<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>', 
     content
 )
 
 # claat sometimes outputs inline code blocks with literal angle brackets instead of escaping them
 content = re.sub(
     r'<YOUR_PROJECT_ID>', 
-    r'<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>', 
+    r'<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>', 
     content
 )
 
@@ -38,7 +38,7 @@ injection = """
 <div id="project-id-container" style="position: fixed; top: 15px; right: 15px; z-index: 9999; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #dadce0; display: flex; align-items: center; gap: 10px; font-family: Roboto, sans-serif;">
     <label for="project-id-input" style="font-size: 13px; font-weight: 500; color: #3c4043;">GCP Project ID:</label>
     <input type="text" id="project-id-input" placeholder="my-gcp-project" style="padding: 6px 10px; border: 1px solid #dadce0; border-radius: 4px; font-size: 13px; outline: none; width: 150px;">
-    <button id="project-id-apply" style="padding: 6px 12px; background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500;">Apply</button>
+    <button id="project-id-apply" style="padding: 6px 12px; background: #0f9d58; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500;">Apply</button>
 </div>
 
 <script>
@@ -51,13 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const newVal = inputField.value.trim() || '&lt;YOUR_PROJECT_ID&gt;';
         document.querySelectorAll('.project-id-placeholder').forEach(el => {
             el.innerText = newVal;
-            el.style.color = newVal === '&lt;YOUR_PROJECT_ID&gt;' ? '#ea4335' : '#1a73e8';
+            el.style.color = newVal === '&lt;YOUR_PROJECT_ID&gt;' ? '#0f9d58' : '#1a73e8';
         });
         applyBtn.innerText = 'Applied!';
         applyBtn.style.background = '#0f9d58';
         setTimeout(() => {
             applyBtn.innerText = 'Apply';
-            applyBtn.style.background = '#1a73e8';
+            applyBtn.style.background = '#0f9d58';
         }, 2000);
     };
 

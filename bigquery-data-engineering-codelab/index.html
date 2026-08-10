@@ -60,7 +60,7 @@
 <li><strong>Prompt Engineering for DE</strong>: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.</li>
 </ul>
 <h2 is-upgraded>🛑 Important Prerequisite: Set Your Project ID</h2>
-<p>Throughout this codelab, you will see the placeholder <code><span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code> in SQL queries and configuration files.</p>
+<p>Throughout this codelab, you will see the placeholder <code><span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code> in SQL queries and configuration files.</p>
 <p><strong>Interactive Feature:</strong> Look at the <strong>top right corner</strong> of this page! We&#39;ve added a custom text box for you. Simply type your actual Google Cloud Project ID into the box and click <strong>Apply</strong>. This will instantly and automatically update all the code snippets on this page for you!</p>
 
 
@@ -107,13 +107,13 @@
 <p>Run the following standard BigQuery SQL commands in your workspace:</p>
 <pre><code language="language-sql" class="language-sql">-- 1. CLEANUP: Resetting the environment to a pristine state
 -----------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales`;
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD`;
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD`;
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD`;
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1`;
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000`;
-DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000`;
+DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x`;
 -----------------------------------------------------------------------------------------
 </code></pre>
 
@@ -125,10 +125,10 @@ DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #ea4335
 <p>Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).</p>
 <h2 is-upgraded>Create Datasets</h2>
 <p>Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets. <em>(Note: If these datasets are already present in your project, you can skip this step).</em></p>
-<pre><code language="language-sql" class="language-sql">CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer`;
-CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master`;
-CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text`;
-CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.final_layer`;
+<pre><code language="language-sql" class="language-sql">CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer`;
+CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master`;
+CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text`;
+CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.final_layer`;
 </code></pre>
 <h2 is-upgraded>Create Tables</h2>
 <p>Execute these DDL statements to construct your database structures:</p>
@@ -136,7 +136,7 @@ CREATE SCHEMA IF NOT EXISTS `<span class="project-id-placeholder" style="color: 
 -----------------------------------------------------------------------------------------
 
 -- MATERIAL MASTER DATA
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` (
   Material_MATERIAL STRING, LanguageKey STRING, Material_MATERIAL_T STRING, MaterialType_MATL_TYPE STRING, MaterialGroup_MATL_GROUP STRING,
   BaseUnit STRING, GrossWeight NUMERIC, NetWeight NUMERIC, WeightUnit STRING, Volume NUMERIC, VolumeUnit STRING, IndustrySector STRING,
   CreatedBy STRING, CreatedOn DATE, ChangedBy STRING, LastChangedOn DATE, Division STRING, ProductHierarchy STRING, Brand STRING,
@@ -144,7 +144,7 @@ CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-w
 );
 
 -- CUSTOMER MASTER DATA
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` (
   Client_MANDT STRING, CustomerNumber_KUNNR STRING, Name1_NAME1 STRING, Name2_NAME2 STRING, CountryKey_LAND1 STRING,
   City_ORT01 STRING, PostalCode_PSTLZ STRING, Region_REGIO STRING, Street_STRAS STRING, Phone_TELF1 STRING, Fax_TELFX STRING,
   AccountGroup_KTOKD STRING, Industry_BRSCH STRING, CreatedOn_ERDAT DATE, CreatedBy_ERNAM STRING, DeletionFlag_LOEVM STRING,
@@ -153,7 +153,7 @@ CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-w
 );
 
 -- PLANT MASTER DATA
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` (
   Plant_PLANT STRING, LanguageKey STRING, Plant_PLANT_T STRING, FactoryCalendar STRING, Name2 STRING, HouseNum STRING,
   Street STRING, PoBox STRING, PostalCode STRING, City STRING, Country STRING, Region STRING, TaxJurisdiction STRING,
   PurchasingOrg STRING, SalesOrg STRING, DistChannel STRING, Division STRING, Category STRING, BatchMgmt STRING,
@@ -161,27 +161,27 @@ CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-w
 );
 
 -- TEXT ENRICHMENT TABLES
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` (
   MANDT STRING, KUNNR STRING, NAME1 STRING, LAND1 STRING, ORT01 STRING, PSTLZ STRING, REGIO STRING, STRAS STRING, TELF1 STRING, TELFX STRING,
   KTOKD STRING, BRSCH STRING, ERDAT DATE, ERNAM STRING, LOEVM STRING, STCD1 STRING, STCD2 STRING, SPRAS STRING, VBUND STRING, STCEG STRING,
   NIELS STRING, ORT02 STRING, KUKLA STRING, BEGRU STRING, ADRNR STRING
 );
 
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` (
   CLIENT STRING, PARTNER STRING, TYPE STRING, BP_CATEGORY STRING, BP_GROUP STRING, NAME_ORG1 STRING, NAME_ORG2 STRING,
   NAME_LAST STRING, NAME_FIRST STRING, TITLE STRING, LANGU STRING, SEARCHTERM1 STRING, SEARCHTERM2 STRING,
   BIRTH_DATE DATE, VALID_FROM DATE, VALID_TO DATE, NATION STRING, HOUSE_NUM STRING, STREET STRING, CITY STRING,
   POSTAL_CODE STRING, COUNTRY STRING, REGION STRING, TEL_NUMBER STRING, SMTP_ADDR STRING
 );
 
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` (
   MANDT STRING, SPRAS STRING, KTOKD STRING, TXT30 STRING, TXT15 STRING,
   F1 STRING, F2 STRING, F3 STRING, F4 STRING, F5 STRING, F6 STRING, F7 STRING, F8 STRING, F9 STRING, F10 STRING,
   F11 STRING, F12 STRING, F13 STRING, F14 STRING, F15 STRING, F16 STRING, F17 STRING, F18 STRING, F19 STRING, F20 STRING, F21 STRING
 );
 
 -- TRANSACTIONAL INPUT LAYER
-CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` (
+CREATE TABLE `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` (
   record INT64, doc_number STRING, material STRING, sold_to STRING, plant STRING, cust_class STRING, calday DATE,
   _bic_bill_date DATE, bic_inv_bkd NUMERIC, _s_ord_item STRING, _bic_bill_item STRING, doc_currcy STRING,
   fiscper STRING, fiscyear STRING, salesorg STRING, distr_chan STRING, division STRING,
@@ -202,36 +202,36 @@ CREATE TABLE `<span class="project-id-placeholder" style="color: #ea4335; font-w
 -----------------------------------------------------------------------------------------
 
 -- Populate Material Master (IDs: MAT-100 to MAT-199)
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` (Material_MATERIAL, LanguageKey, Material_MATERIAL_T, GrossWeight, NetWeight, WeightUnit)
 SELECT CONCAT(&#39;MAT-&#39;, CAST(i AS STRING)), &#39;E&#39;, CONCAT(&#39;Material &#39;, CAST(i AS STRING)), CAST(10.5 + i AS NUMERIC), CAST(9.0 + i AS NUMERIC), &#39;KG&#39;
 FROM UNNEST(GENERATE_ARRAY(100, 199)) AS i;
 
 -- Populate Customer Master (IDs: CUST-1001 to CUST-1100)
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` (Client_MANDT, CustomerNumber_KUNNR, Name1_NAME1, CountryKey_LAND1, AccountGroup_KTOKD)
 SELECT &#39;012&#39;, CONCAT(&#39;CUST-&#39;, CAST(i AS STRING)), CONCAT(&#39;Cust Name &#39;, CAST(i AS STRING)), &#39;US&#39;, &#39;0001&#39;
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate Plant Master (IDs: PLNT-10 to PLNT-109)
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` (Plant_PLANT, LanguageKey, Plant_PLANT_T, Country)
 SELECT CONCAT(&#39;PLNT-&#39;, CAST(i AS STRING)), &#39;E&#39;, CONCAT(&#39;Plant Hub &#39;, CAST(i AS STRING)), &#39;US&#39;
 FROM UNNEST(GENERATE_ARRAY(10, 109)) AS i;
 
 -- Populate KNA1 Customer Localization Text
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` (MANDT, KUNNR, NAME1, LAND1)
 SELECT &#39;012&#39;, CONCAT(&#39;CUST-&#39;, CAST(i AS STRING)), CONCAT(&#39;Legal Ent &#39;, CAST(i AS STRING)), &#39;US&#39;
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate BUT000 Business Partner Context
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` (CLIENT, PARTNER, NAME_ORG1, BP_GROUP)
 SELECT &#39;012&#39;, CONCAT(&#39;CUST-&#39;, CAST(i AS STRING)), CONCAT(&#39;BP Org &#39;, CAST(i AS STRING)), &#39;GRP1&#39;
 FROM UNNEST(GENERATE_ARRAY(1001, 1100)) AS i;
 
 -- Populate T077X Account Group Definitions
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` (MANDT, SPRAS, KTOKD, TXT30)
 VALUES (&#39;012&#39;, &#39;E&#39;, &#39;0001&#39;, &#39;Standard Customer&#39;);
 
 -- Populate Base Actual Sales Records (Mapped dynamically to valid entities)
-INSERT INTO `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
+INSERT INTO `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` (record, doc_number, material, sold_to, plant, cust_class, calday, _bic_bill_date, zs_netrev, bic_inv_bkd, zs_taxamt, zs_grossamt, nt_wt_kg, gr_wt_kg)
 SELECT
   i, 
   CONCAT(&#39;DOC-&#39;, CAST(5000+i AS STRING)), 
@@ -276,18 +276,18 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
   b.NAME_ORG1 AS business_partner_org,
   -- Account Group Text
   t.TXT30 AS account_group_desc
-FROM `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` AS s
-INNER JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` AS m
+FROM `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` AS s
+INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = &#39;E&#39;
-INNER JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` AS p
+INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = &#39;E&#39;
-INNER JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` AS c
+INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = &#39;012&#39;
-INNER JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` AS k
+INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = &#39;012&#39;
-INNER JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` AS b
+INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = &#39;012&#39;
-INNER JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` AS t
+INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;
 ORDER BY s.record ASC;
 </code></pre>
@@ -304,18 +304,18 @@ ORDER BY s.record ASC;
   COUNTIF(k.KUNNR IS NULL) AS MISSING_KNA1_TEXT_KEYS,
   COUNTIF(b.PARTNER IS NULL) AS MISSING_BUT000_TEXT_KEYS,
   COUNTIF(t.KTOKD IS NULL) AS MISSING_T077X_TEXT_KEYS
-FROM `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` AS s
-LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` AS m
+FROM `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales` AS s
+LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.MaterialMD` AS m
   ON s.material = m.Material_MATERIAL AND m.LanguageKey = &#39;E&#39;
-LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` AS p
+LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.PlantMD` AS p
   ON s.plant = p.Plant_PLANT AND p.LanguageKey = &#39;E&#39;
-LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` AS c
+LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master.CustomerMD` AS c
   ON s.sold_to = c.CustomerNumber_KUNNR AND c.Client_MANDT = &#39;012&#39;
-LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` AS k
+LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.kna1` AS k
   ON s.sold_to = k.KUNNR AND k.MANDT = &#39;012&#39;
-LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` AS b
+LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.but000` AS b
   ON s.sold_to = b.PARTNER AND b.CLIENT = &#39;012&#39;
-LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` AS t
+LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text.t077x` AS t
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;;
 </code></pre>
 <p><strong>Expected Result:</strong><img alt="Expected Result" src="img/2418fd6d805b28ae.png"></p>
@@ -336,14 +336,14 @@ LEFT JOIN `<span class="project-id-placeholder" style="color: #ea4335; font-weig
 <p>A prompt window will open at the bottom of the screen. First, click on <strong>Pipeline instructions</strong>. In the resulting popup, click <strong>Create Instructions file</strong>, which will open a new context window for the <code>GEMINI.md</code> file.</p>
 <p><strong>Why GEMINI.md?</strong> The <code>GEMINI.md</code> file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the &#34;big picture&#34;—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.</p>
 <p>Copy the comprehensive instruction block below into the file and save it. <strong>Make sure to replace all instances of </strong></p>
-<p><strong><code><span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code></strong></p>
+<p><strong><code><span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code></strong></p>
 <p><strong> with your actual Google Cloud Project ID.</strong> These rules ensure the agent writes code that complies with our Dataform standards:</p>
 <pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the &#34;Medallion Architecture&#34; logic .
 Technical Context:
-Initial Source: <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales
+Initial Source: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales
 Target Dataset: final_layer
-Master Data Source: <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master
-Text Data Source: <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text
+Master Data Source: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master
+Text Data Source: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text
 Dataform Best Practices (Required for ALL scripts):
 Config Block: Use type: &#34;table&#34;. Include the tag [&#34;zinbobu_agent&#34;] and a comprehensive description field summarizing the job&#39;s business purpose.
 Dependency Management: Exclusively use the ref() function to establish the transformation chain: Job 1 -&gt; Job 2 -&gt; Job 3 -&gt; Job 4.
@@ -476,10 +476,10 @@ Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate r
 <h2 is-upgraded>Advanced Single Prompt Example</h2>
 <pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the &#34;Medallion Architecture&#34; logic.
 Technical Context:
-Initial Source: <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales
+Initial Source: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales
 Target Dataset: final_layer
-Master table Sources: <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master and <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text
-Text table  Sources: <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master and <span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text
+Master table Sources: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master and <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text
+Text table  Sources: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_master and <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.sap_text
 
 Dataform Best Practices Requirements for ALL Scripts:
 Config Block: Use type: &#34;table&#34;. Include the tag [&#34;zinbobu_agent&#34;] and a comprehensive description field summarizing the job&#39;s purpose.
@@ -530,7 +530,7 @@ Think through the logic step-by-step to ensure column name collisions are avoide
 <div id="project-id-container" style="position: fixed; top: 15px; right: 15px; z-index: 9999; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #dadce0; display: flex; align-items: center; gap: 10px; font-family: Roboto, sans-serif;">
     <label for="project-id-input" style="font-size: 13px; font-weight: 500; color: #3c4043;">GCP Project ID:</label>
     <input type="text" id="project-id-input" placeholder="my-gcp-project" style="padding: 6px 10px; border: 1px solid #dadce0; border-radius: 4px; font-size: 13px; outline: none; width: 150px;">
-    <button id="project-id-apply" style="padding: 6px 12px; background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500;">Apply</button>
+    <button id="project-id-apply" style="padding: 6px 12px; background: #0f9d58; color: white; border: none; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500;">Apply</button>
 </div>
 
 <script>
@@ -543,13 +543,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const newVal = inputField.value.trim() || '&lt;YOUR_PROJECT_ID&gt;';
         document.querySelectorAll('.project-id-placeholder').forEach(el => {
             el.innerText = newVal;
-            el.style.color = newVal === '&lt;YOUR_PROJECT_ID&gt;' ? '#ea4335' : '#1a73e8';
+            el.style.color = newVal === '&lt;YOUR_PROJECT_ID&gt;' ? '#0f9d58' : '#1a73e8';
         });
         applyBtn.innerText = 'Applied!';
         applyBtn.style.background = '#0f9d58';
         setTimeout(() => {
             applyBtn.innerText = 'Apply';
-            applyBtn.style.background = '#1a73e8';
+            applyBtn.style.background = '#0f9d58';
         }, 2000);
     };
 

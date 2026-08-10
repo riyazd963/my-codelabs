@@ -315,7 +315,7 @@ Organization is key. Rename the pipeline from **Untitled pipeline** to a descrip
 
 <img src="img/ss2.png" alt="Create Pipeline Context Menu" width="400">
 
-A prompt window will open at the bottom of the screen. Click on `Pipeline instructions` to open a new context window with the filename `GEMINI.md`. 
+A prompt window will open at the bottom of the screen. First, click on **Pipeline instructions**. In the resulting popup, click **Create Instructions file**, which will open a new context window for the `GEMINI.md` file.
 
 **Why GEMINI.md?**
 The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.

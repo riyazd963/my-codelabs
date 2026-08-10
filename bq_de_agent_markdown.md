@@ -37,7 +37,7 @@ By establishing a baseline environment and then prompting the Data Engineering A
 * **Production Dataform Frameworks**: Implementing the Data Engineering Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.
 * **Prompt Engineering for DE**: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.
 
-### 🛑 Important Prerequisite: Set Your Project ID
+### ✅ Important Prerequisite: Set Your Project ID
 Throughout this codelab, you will see the placeholder `<YOUR_PROJECT_ID>` in SQL queries and configuration files. 
 
 **Interactive Feature:** 

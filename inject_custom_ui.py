@@ -25,6 +25,13 @@ content = re.sub(
     content
 )
 
+# claat sometimes outputs inline code blocks with literal angle brackets instead of escaping them
+content = re.sub(
+    r'<YOUR_PROJECT_ID>', 
+    r'<span class="project-id-placeholder" style="color: #ea4335; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>', 
+    content
+)
+
 # 3. Inject the UI (Input Box + Copy Buttons)
 injection = """
 <!-- custom-ui-script -->

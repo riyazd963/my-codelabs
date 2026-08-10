@@ -525,5 +525,46 @@ Think through the logic step-by-step to ensure column name collisions are avoide
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
   <script src="//support.google.com/inapp/api.js"></script>
 
+
+<!-- copy-button-script -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('pre').forEach(pre => {
+        let btn = document.createElement('button');
+        btn.innerText = 'Copy';
+        btn.style.position = 'absolute';
+        btn.style.right = '10px';
+        btn.style.top = '10px';
+        btn.style.padding = '4px 8px';
+        btn.style.border = 'none';
+        btn.style.borderRadius = '4px';
+        btn.style.background = '#4285f4';
+        btn.style.color = '#fff';
+        btn.style.cursor = 'pointer';
+        btn.style.fontSize = '12px';
+        btn.style.fontFamily = 'Roboto, sans-serif';
+        btn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+        
+        btn.onclick = () => {
+            // Get all text content EXCEPT the button's own text
+            let code = Array.from(pre.childNodes)
+                .filter(node => node !== btn)
+                .map(node => node.textContent)
+                .join('');
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerText = 'Copied!';
+                btn.style.background = '#0f9d58';
+                setTimeout(() => {
+                    btn.innerText = 'Copy';
+                    btn.style.background = '#4285f4';
+                }, 2000);
+            });
+        };
+        pre.style.position = 'relative';
+        pre.appendChild(btn);
+    });
+});
+</script>
 </body>
+
 </html>

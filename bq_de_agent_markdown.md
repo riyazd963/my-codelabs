@@ -40,8 +40,8 @@ By establishing a baseline environment and then prompting the Data Engineering A
 ### 🛑 Important Prerequisite: Set Your Project ID
 Throughout this codelab, you will see the placeholder `<YOUR_PROJECT_ID>` in SQL queries and configuration files. 
 
-**Before running any code block:** 
-We highly recommend copying the scripts into a text editor (like Notepad, VS Code, or a new BigQuery SQL tab) and running a quick **Find & Replace All** to swap `<YOUR_PROJECT_ID>` with your actual Google Cloud Project ID. 
+**Interactive Feature:** 
+Look at the **top right corner** of this page! We've added a custom text box for you. Simply type your actual Google Cloud Project ID into the box and click **Apply**. This will instantly and automatically update all the code snippets on this page for you!
 
 ---
 

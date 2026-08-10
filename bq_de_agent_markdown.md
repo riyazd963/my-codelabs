@@ -63,6 +63,8 @@ Look at the **top right corner** of this page! We've added a custom text box for
 
 ---
 
+### Executing the Cleanup
+
 To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.
 
 By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.

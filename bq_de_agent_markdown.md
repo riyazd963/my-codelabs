@@ -81,7 +81,7 @@ With our environment clear, we transition to the schema definition phase. Here, 
 Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).
 
 ### Create Datasets
-Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets:
+Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets. *(Note: If these datasets are already present in your project, you can skip this step).*
 
 ```sql
 CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.input_layer`;

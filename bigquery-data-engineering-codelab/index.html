@@ -121,7 +121,7 @@ DROP TABLE IF EXISTS `Your_GCP_ProjectID.sap_text.t077x`;
         <p>With our environment clear, we transition to the schema definition phase. Here, we use Data Definition Language (DDL) to explicitly define the structural properties of our tables.</p>
 <p>Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).</p>
 <h2 is-upgraded>Create Datasets</h2>
-<p>Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets:</p>
+<p>Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets. <em>(Note: If these datasets are already present in your project, you can skip this step).</em></p>
 <pre><code language="language-sql" class="language-sql">CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.input_layer`;
 CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.sap_master`;
 CREATE SCHEMA IF NOT EXISTS `Your_GCP_ProjectID.sap_text`;

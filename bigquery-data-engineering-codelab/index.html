@@ -59,9 +59,6 @@
 <li><strong>Production Dataform Frameworks</strong>: Implementing the Data Engineering Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.</li>
 <li><strong>Prompt Engineering for DE</strong>: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.</li>
 </ul>
-<h2 is-upgraded>✅ Important Prerequisite: Set Your Project ID</h2>
-<p>Throughout this codelab, you will see the placeholder <code><span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code> in SQL queries and configuration files.</p>
-<p><strong>Interactive Feature:</strong> Look at the <strong>top right corner</strong> of this page! We&#39;ve added a custom text box for you. Simply type your actual Google Cloud Project ID into the box and click <strong>Apply</strong>. This will instantly and automatically update all the code snippets on this page for you!</p>
 
 
       </google-codelab-step>
@@ -102,7 +99,10 @@
       </google-codelab-step>
     
       <google-codelab-step label="Environment Cleanup" duration="0">
-        <p>To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.</p>
+        <h2 is-upgraded>✅ Important Prerequisite: Set Your Project ID</h2>
+<p>Throughout this codelab, you will see the placeholder <code><span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code> in SQL queries and configuration files.</p>
+<p><strong>Interactive Feature:</strong> Look at the <strong>top right corner</strong> of this page! We&#39;ve added a custom text box for you. Simply type your actual Google Cloud Project ID into the box and click <strong>Apply</strong>. This will instantly and automatically update all the code snippets on this page for you!</p>
+<p>To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.</p>
 <p>By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.</p>
 <p>Run the following standard BigQuery SQL commands in your workspace:</p>
 <pre><code language="language-sql" class="language-sql">-- 1. CLEANUP: Resetting the environment to a pristine state

@@ -37,13 +37,6 @@ By establishing a baseline environment and then prompting the Data Engineering A
 * **Production Dataform Frameworks**: Implementing the Data Engineering Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.
 * **Prompt Engineering for DE**: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.
 
-### ✅ Important Prerequisite: Set Your Project ID
-Throughout this codelab, you will see the placeholder `<YOUR_PROJECT_ID>` in SQL queries and configuration files. 
-
-**Interactive Feature:** 
-Look at the **top right corner** of this page! We've added a custom text box for you. Simply type your actual Google Cloud Project ID into the box and click **Apply**. This will instantly and automatically update all the code snippets on this page for you!
-
----
 
 ## Environment Architecture Overview
 Before we begin writing any code, it is critical to understand the layout of our datasets and tables. A well-organized environment prevents confusion and enforces data governance. 
@@ -62,6 +55,14 @@ Take a moment to familiarize yourself with these datasets. The `input_layer` act
 ---
 
 ## Environment Cleanup
+### ✅ Important Prerequisite: Set Your Project ID
+Throughout this codelab, you will see the placeholder `<YOUR_PROJECT_ID>` in SQL queries and configuration files. 
+
+**Interactive Feature:** 
+Look at the **top right corner** of this page! We've added a custom text box for you. Simply type your actual Google Cloud Project ID into the box and click **Apply**. This will instantly and automatically update all the code snippets on this page for you!
+
+---
+
 To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.
 
 By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.

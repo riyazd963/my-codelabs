@@ -362,7 +362,7 @@ Task: Select all columns and rows from the actual_sales source table.
 Formatting: Ensure the config block includes a description identifying this as the "Bronze/Raw Ingestion Layer".
 ```
 
-The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code.
+The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
 
 <img src="img/ss5.png" alt="Module 1" width="400">
 
@@ -383,7 +383,7 @@ Task: Clean technical prefixes from all column names. Specifically, strip _bic_,
 Audit Requirement: For every renamed column, add an inline SQL comment -- Renamed from [Original Name].
 ```
 
-Observe how the agent updates the pipeline to include the schema cleaning logic.
+Observe how the agent updates the pipeline to include the schema cleaning logic. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
 
 <img src="img/ss6.png" alt="Module 2 Generation" width="400">
 
@@ -405,7 +405,7 @@ Join Logic (Plant): LEFT JOIN with PlantMD. Select MillR_GRMILL, Plant_PLANT, an
 Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 ```
 
-The agent will seamlessly weave the `LEFT JOIN` logic into our transformation chain.
+The agent will seamlessly weave the `LEFT JOIN` logic into our transformation chain. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
 
 <img src="img/ss7.png" alt="Module 3 Generation" width="400">
 
@@ -427,7 +427,7 @@ Text Standards: Filter by Language ('E') and SAP Client ('012').
 Selection: Retrieve NAME1 from kna1 and TXT30 from t077x and text fields from but000. Use unique table aliases for each join.
 ```
 
-The agent processes the final enrichment step, completing the core pipeline logic.
+The agent processes the final enrichment step, completing the core pipeline logic. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
 
 <img src="img/ss8.png" alt="Module 4 Generation" width="400">
 
@@ -444,7 +444,7 @@ Join Logic (CustomerMD): LEFT JOIN with CustomerMD. Identify the relevant joinin
 Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 ```
 
-The agent thoughtfully refactors the pipeline graph to incorporate this new requirement.
+The agent thoughtfully refactors the pipeline graph to incorporate this new requirement. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
 
 <img src="img/ss9.png" alt="Module 5 Generation" width="400">
 

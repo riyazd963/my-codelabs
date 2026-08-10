@@ -365,7 +365,9 @@ Instruction: Based on the common requirements provided, create the first module:
 Task: Select all columns and rows from the actual_sales source table.
 Formatting: Ensure the config block includes a description identifying this as the &#34;Bronze/Raw Ingestion Layer&#34;.
 </code></pre>
-<p>The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code.</p>
+<p>The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. <em>(Note: Once the agent completes execution, be sure to click </em></p>
+<p><strong><em>Apply</em></strong></p>
+<p><em> to save the changes, otherwise they will be lost.)</em></p>
 <p class="image-container"><img alt="Module 1" style="width: 400.00px" src="img/509ce27b29598bde.png"></p>
 <p>Upon executing this generated pipeline, you will find that the new table <code>actual_sales_step1</code> has been successfully created under the <code>final_layer</code> dataset, maintaining a 1:1 parity with the source data.</p>
 <p class="image-container"><img alt="Module 1 Output" style="width: 400.00px" src="img/ac82d52221b3a914.png"></p>
@@ -382,7 +384,9 @@ Dependency: This script must reference actual_sales_step1.
 Task: Clean technical prefixes from all column names. Specifically, strip _bic_, bic_, or a leading _ (e.g., _bic_bill_date becomes bill_date).
 Audit Requirement: For every renamed column, add an inline SQL comment -- Renamed from [Original Name].
 </code></pre>
-<p>Observe how the agent updates the pipeline to include the schema cleaning logic.</p>
+<p>Observe how the agent updates the pipeline to include the schema cleaning logic. <em>(Note: Once the agent completes execution, be sure to click </em></p>
+<p><strong><em>Apply</em></strong></p>
+<p><em> to save the changes, otherwise they will be lost.)</em></p>
 <p class="image-container"><img alt="Module 2 Generation" style="width: 400.00px" src="img/dcf549c4c575b2c4.png"></p>
 <p>After running the pipeline, the <code>actual_sales_step2</code> table is created in the <code>final_layer</code> dataset, showcasing clean, user-friendly column names.</p>
 <p class="image-container"><img alt="Module 2 Output" style="width: 400.00px" src="img/79ee15007d789598.png"></p>
@@ -400,7 +404,9 @@ Join Logic (Material): LEFT JOIN with MaterialMD. Select MaterialType, MaterialG
 Join Logic (Plant): LEFT JOIN with PlantMD. Select MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
 Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate records.
 </code></pre>
-<p>The agent will seamlessly weave the <code>LEFT JOIN</code> logic into our transformation chain.</p>
+<p>The agent will seamlessly weave the <code>LEFT JOIN</code> logic into our transformation chain. <em>(Note: Once the agent completes execution, be sure to click </em></p>
+<p><strong><em>Apply</em></strong></p>
+<p><em> to save the changes, otherwise they will be lost.)</em></p>
 <p class="image-container"><img alt="Module 3 Generation" style="width: 400.00px" src="img/e9b33d31d99664d4.png"></p>
 <p>Executing this pipeline yields the <code>actual_sales_step3</code> table, now brimming with descriptive material and plant information.</p>
 <p class="image-container"><img alt="Module 3 Output" style="width: 400.00px" src="img/baad483a86b436cb.png"></p>
@@ -418,7 +424,9 @@ Enrichment Task: Join with text tables kna1, but000, and t077x.
 Text Standards: Filter by Language (&#39;E&#39;) and SAP Client (&#39;012&#39;).
 Selection: Retrieve NAME1 from kna1 and TXT30 from t077x and text fields from but000. Use unique table aliases for each join.
 </code></pre>
-<p>The agent processes the final enrichment step, completing the core pipeline logic.</p>
+<p>The agent processes the final enrichment step, completing the core pipeline logic. <em>(Note: Once the agent completes execution, be sure to click </em></p>
+<p><strong><em>Apply</em></strong></p>
+<p><em> to save the changes, otherwise they will be lost.)</em></p>
 <p class="image-container"><img alt="Module 4 Generation" style="width: 400.00px" src="img/3e872accbf3796a4.png"></p>
 
 
@@ -433,7 +441,9 @@ Dependency: Reference actual_sales_step2.
 Join Logic (CustomerMD): LEFT JOIN with CustomerMD. Identify the relevant joining keys and fetch the relevant fields from CustomerMD.
 Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate records.
 </code></pre>
-<p>The agent thoughtfully refactors the pipeline graph to incorporate this new requirement.</p>
+<p>The agent thoughtfully refactors the pipeline graph to incorporate this new requirement. <em>(Note: Once the agent completes execution, be sure to click </em></p>
+<p><strong><em>Apply</em></strong></p>
+<p><em> to save the changes, otherwise they will be lost.)</em></p>
 <p class="image-container"><img alt="Module 5 Generation" style="width: 400.00px" src="img/6313bc170d6a03f8.png"></p>
 
 

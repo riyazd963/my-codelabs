@@ -332,7 +332,9 @@ LEFT JOIN `Your_GCP_ProjectID.sap_text.t077x` AS t
 <p class="image-container"><img alt="Create Pipeline Context Menu" style="width: 400.00px" src="img/febdad90c968c81c.png"></p>
 <p>A prompt window will open at the bottom of the screen. First, click on <strong>Pipeline instructions</strong>. In the resulting popup, click <strong>Create Instructions file</strong>, which will open a new context window for the <code>GEMINI.md</code> file.</p>
 <p><strong>Why GEMINI.md?</strong> The <code>GEMINI.md</code> file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the &#34;big picture&#34;—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.</p>
-<p>Copy the comprehensive instruction block below into the file and save it. These rules ensure the agent writes code that complies with our Dataform standards:</p>
+<p>Copy the comprehensive instruction block below into the file and save it. <strong>Make sure to replace all instances of </strong></p>
+<p><strong><code>Your_GCP_ProjectID</code></strong></p>
+<p><strong> with your actual Google Cloud Project ID.</strong> These rules ensure the agent writes code that complies with our Dataform standards:</p>
 <pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the &#34;Medallion Architecture&#34; logic .
 Technical Context:
 Initial Source: Your_GCP_ProjectID.input_layer.actual_sales

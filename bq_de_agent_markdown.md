@@ -320,7 +320,7 @@ A prompt window will open at the bottom of the screen. First, click on **Pipelin
 **Why GEMINI.md?**
 The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.
 
-Copy the comprehensive instruction block below into the file and save it. These rules ensure the agent writes code that complies with our Dataform standards:
+Copy the comprehensive instruction block below into the file and save it. **Make sure to replace all instances of `Your_GCP_ProjectID` with your actual Google Cloud Project ID.** These rules ensure the agent writes code that complies with our Dataform standards:
 
 ```text
 Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the "Medallion Architecture" logic .

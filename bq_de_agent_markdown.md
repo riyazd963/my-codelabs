@@ -319,6 +319,10 @@ In the BigQuery explorer sidebar, look for the **Pipelines** dropdown menu. Clic
 
 <img src="img/ss1.png" alt="GCP BigQuery Navigation" width="400">
 
+When a pipeline is created, it will ask for credentials. Choose the first option ("Run with user credentials") and click **Get started**.
+
+<img src="img/credentials_selection.png" alt="Credentials Selection" width="400">
+
 ### Rename Pipeline and Start Agent
 Organization is key. Rename the pipeline from **Untitled pipeline** to a descriptive name, such as **DE_Agent_Pipeline**. Once renamed, click on `Ask Agent` in the top menu to initiate our AI-assisted workflow.
 

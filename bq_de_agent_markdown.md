@@ -324,7 +324,7 @@ When a pipeline is created, it will ask for credentials. Choose the first option
 <img src="img/credentials_selection.png" alt="Credentials Selection" width="400">
 
 ### Rename Pipeline and Start Agent
-Organization is key. Rename the pipeline from **Untitled pipeline** to a descriptive name, such as **DE_Agent_Pipeline**. Once renamed, click on `Ask Agent` in the top menu to initiate our AI-assisted workflow.
+Organization is key. Click on the "Untitled pipeline" text located just beside the **Run** button at the top, and give it a meaningful name, such as **DE_Agent_Pipeline**. Once renamed, click on `Ask Agent` in the top menu to initiate our AI-assisted workflow.
 
 <img src="img/ss2.png" alt="Create Pipeline Context Menu" width="400">
 

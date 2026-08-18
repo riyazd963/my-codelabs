@@ -39,6 +39,9 @@ By establishing a baseline environment and then prompting the Data Engineering A
 
 
 ## Environment Architecture Overview
+### Overview of the Transformation
+We are going to enrich the actual sales data from the SAP system with master data and text files to make it accessible and easily understood for business users.
+
 Before we begin writing any code, it is critical to understand the layout of our datasets and tables. A well-organized environment prevents confusion and enforces data governance. 
 
 Our data environment is structured into specific layers and domains as follows:

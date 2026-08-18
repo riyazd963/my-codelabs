@@ -69,7 +69,7 @@ To ensure a clean deployment and avoid conflicts with any legacy schema versions
 
 By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.
 
-Run the following standard BigQuery SQL commands in your workspace:
+Run the following standard BigQuery SQL commands in your Bigquery studio:
 
 ```sql
 -- 1. CLEANUP: Resetting the environment to a pristine state

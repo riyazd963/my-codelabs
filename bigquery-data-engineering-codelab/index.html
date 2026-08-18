@@ -105,7 +105,7 @@
 <h2 is-upgraded>Executing the Cleanup</h2>
 <p>To ensure a clean deployment and avoid conflicts with any legacy schema versions, our first step is to clean the slate.</p>
 <p>By dropping existing tables before recreation, we guarantee that our pipeline starts from a known, predictable state.</p>
-<p>Run the following standard BigQuery SQL commands in your workspace:</p>
+<p>Run the following standard BigQuery SQL commands in your Bigquery studio:</p>
 <pre><code language="language-sql" class="language-sql">-- 1. CLEANUP: Resetting the environment to a pristine state
 -----------------------------------------------------------------------------------------
 DROP TABLE IF EXISTS `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales`;

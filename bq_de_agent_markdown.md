@@ -522,7 +522,7 @@ FROM `<YOUR_PROJECT_ID>.final_layer.actual_sales_step4`
 ORDER BY record ASC;
 ```
 
-When you run this query, you should see exactly **99 records** returned, just like in our initial manual test! However, instead of analysts having to understand complex SAP table structures and join keys, they can now query a single, clean, standardized table. 
+When you run this query, you should see exactly **100 records** returned. Wait, didn't our initial manual test return 99 records? Yes! That's because our initial test used `INNER JOIN`s, which dropped the orphaned sales records. Because our Dataform pipeline correctly used `LEFT JOIN`s as instructed, it successfully preserved all 100 original transactional records. Best of all, instead of analysts having to understand complex SAP table structures and join keys, they can now query a single, clean, standardized table. 
 
 ### Validation 2: Data Quality & Orphaned Records Check
 We also need to verify that our relational integrity checks hold true. Since the Dataform pipeline correctly used `LEFT JOIN`s, any sales records missing master data will simply have `NULL` values in their enriched columns. We can run a quick diagnostic:

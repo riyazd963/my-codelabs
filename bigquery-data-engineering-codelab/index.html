@@ -486,7 +486,7 @@ Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate r
 FROM `<span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.final_layer.actual_sales_step4`
 ORDER BY record ASC;
 </code></pre>
-<p>When you run this query, you should see exactly <strong>99 records</strong> returned, just like in our initial manual test! However, instead of analysts having to understand complex SAP table structures and join keys, they can now query a single, clean, standardized table.</p>
+<p>When you run this query, you should see exactly <strong>100 records</strong> returned. Wait, didn&#39;t our initial manual test return 99 records? Yes! That&#39;s because our initial test used <code>INNER JOIN</code>s, which dropped the orphaned sales records. Because our Dataform pipeline correctly used <code>LEFT JOIN</code>s as instructed, it successfully preserved all 100 original transactional records. Best of all, instead of analysts having to understand complex SAP table structures and join keys, they can now query a single, clean, standardized table.</p>
 <h2 is-upgraded>Validation 2: Data Quality &amp; Orphaned Records Check</h2>
 <p>We also need to verify that our relational integrity checks hold true. Since the Dataform pipeline correctly used <code>LEFT JOIN</code>s, any sales records missing master data will simply have <code>NULL</code> values in their enriched columns. We can run a quick diagnostic:</p>
 <pre><code language="language-sql" class="language-sql">SELECT

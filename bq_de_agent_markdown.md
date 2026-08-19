@@ -48,7 +48,7 @@ Our data environment is structured into specific layers and domains as follows:
 | Layer / Purpose | Dataset | Table Name | Description |
 | :--- | :--- | :--- | :--- |
 | **Source (Raw SAP)** | `input_layer` | `actual_sales` | Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational raw layer for our pipeline. |
-| **Target** | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3` | Holds the refined, enriched, and aggregated sales models.<br>Represents the final refined tiers for business reporting. |
+| **Target** | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3`, `actual_sales_step4` | Holds the refined, enriched, and aggregated sales models.<br>Represents the final refined tiers for business reporting. |
 | **Master Data** | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` | Stores key dimensional attributes for materials, plants, and customers.<br>Used to enrich raw transactions with contextual meaning. |
 | **Text Enrichment** | `sap_text` | `kna1`, `but000`, `t077x` | Provides human-readable localization strings and text descriptions.<br>Ensures that final reports are easily understood by business users. |
 
@@ -466,7 +466,7 @@ Module 5: Master Data Enrichment Extension
 Instruction: Based on the common requirements, enhance actual_sales_step3.sqlx.
 Dependency: Reference actual_sales_step2.
 Join Logic (CustomerMD): LEFT JOIN with CustomerMD. Identify the relevant joining keys and fetch the relevant fields from CustomerMD.
-Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
+Standards: Filter the Material and Plant joins by LanguageKey = 'E', and filter the CustomerMD join by Client_MANDT = '012'.
 ```
 
 The agent thoughtfully refactors the pipeline graph to incorporate this new requirement. **Note:** Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.
@@ -488,7 +488,7 @@ Instruction: Based on the common requirements, enhance actual_sales_step3.sqlx.
 Dependency: Reference actual_sales_step2.
 I need a correction to the script actual_sales_step3.sqlx.
 Do not rename the master table columns, keep them exactly as they are.
-Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
+Standards: Filter the Material and Plant joins by LanguageKey = 'E', and filter the CustomerMD join by Client_MANDT = '012'.
 ```
 
 The agent applies the requested corrections, yielding a precise and compliant transformation script.

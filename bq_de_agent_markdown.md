@@ -416,8 +416,8 @@ Provide the following prompt to build Module 3:
 Module 3: Master Data Enrichment (Job 3)
 Instruction: Based on the common requirements, create actual_sales_step3.sqlx.
 Dependency: Reference actual_sales_step2.
-Join Logic (Material): LEFT JOIN with MaterialMD. Select MaterialType, MaterialGroup, Product_ZPRODUCTC, and BrandName_CBRANDNME_T.
-Join Logic (Plant): LEFT JOIN with PlantMD. Select MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
+Join Logic (Material): LEFT JOIN with MaterialMD. Select MaterialType_MATL_TYPE, MaterialGroup_MATL_GROUP, Brand, and MaterialCategory.
+Join Logic (Plant): LEFT JOIN with PlantMD. Select PurchasingOrg, Plant_PLANT_T, and Category.
 Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 ```
 
@@ -439,8 +439,8 @@ Module 4: Human-Readable Text Enrichment (Job 4)
 Instruction: Based on the common requirements, create the final module: actual_sales_step4.sqlx.
 Dependency: Reference actual_sales_step3.
 Enrichment Task: Join with text tables kna1, but000, and t077x.
-Text Standards: Filter by Language ('E') and SAP Client ('012').
-Selection: Retrieve NAME1 from kna1 and TXT30 from t077x and text fields from but000. Use unique table aliases for each join.
+Text Standards: Filter all text tables by Client ('012'). Additionally, filter t077x by Language ('E').
+Selection: Retrieve NAME1 from kna1, TXT30 from t077x, and text fields from but000. Use unique table aliases for each join.
 ```
 
 The agent processes the final enrichment step, completing the core pipeline logic. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
@@ -495,8 +495,8 @@ Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of 
 Technical Context:
 Initial Source: <YOUR_PROJECT_ID>.input_layer.actual_sales
 Target Dataset: final_layer
-Master table Sources: <YOUR_PROJECT_ID>.sap_master and <YOUR_PROJECT_ID>.sap_text
-Text table  Sources: <YOUR_PROJECT_ID>.sap_master and <YOUR_PROJECT_ID>.sap_text
+Master Data Source: <YOUR_PROJECT_ID>.sap_master
+Text Data Source: <YOUR_PROJECT_ID>.sap_text
 
 Dataform Best Practices Requirements for ALL Scripts:
 Config Block: Use type: "table". Include the tag ["zinbobu_agent"] and a comprehensive description field summarizing the job's purpose.
@@ -517,12 +517,12 @@ Assertion: Check that the resulting bill_date (or equivalent) is never null.
 Job 3 (Master Data Enrichment): Create actual_sales_step3.sqlx.
 Join Logic: Perform LEFT JOIN operations with MaterialMD and PlantMD.
 Standard master table filters: Apply a WHERE clause for LanguageKey = 'E' for both master tables to prevent row explosion.
-Material Selection: Fetch MaterialType, MaterialGroup, Product_ZPRODUCTC, and BrandName_CBRANDNME_T.
-Plant Selection: Fetch MillR_GRMILL, Plant_PLANT, and PlantType_ZPLNTTYP.
+Material Selection: Fetch MaterialType_MATL_TYPE, MaterialGroup_MATL_GROUP, Brand, and MaterialCategory.
+Plant Selection: Fetch PurchasingOrg, Plant_PLANT_T, and Category.
 
 Job 4 (Text Table Enrichment - Final Layer): Create actual_sales_step4.sqlx.
 Task: Join with kna1, but000, and t077x.
-Standards: Filter by Language ('E') and Client ('012').
+Standards: Filter all text tables by Client ('012'). Additionally, filter t077x by Language ('E').
 Select: Retrieve NAME1 from kna1 and TXT30 from t077x. Use unique aliases like customer_text and category_description.
 Performance: Add bigquery: { partitionBy: "CLEAN_DATE_FIELD" } to the config block if a date field is available.
 

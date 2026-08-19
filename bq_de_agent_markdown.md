@@ -316,7 +316,7 @@ All subsequent Dataform modules must adhere strictly to the following architectu
 Navigate to the Google Cloud Console, select your project, and open the **BigQuery** console from the navigation menu.
 In the BigQuery explorer sidebar, look for the **Pipelines** dropdown menu. Click the three dots (options menu) next to Pipelines and select **Create pipeline**.
 
-![GCP BigQuery Navigation](img/ss1.png)
+<img src="img/ss1.png" alt="GCP BigQuery Navigation" width="400">
 
 When a pipeline is created, it will ask for credentials. Choose the first option ("Run with user credentials") and click **Get started**.
 

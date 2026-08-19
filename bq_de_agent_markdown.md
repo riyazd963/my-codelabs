@@ -357,7 +357,7 @@ Pause & Wait: After completing the requested Job, you must explicitly ask me for
 No Leapfrogging: Do not generate logic for future Jobs (e.g., joins or renames) until that specific Job is requested 
 ```
 
-After updating the instructions, commit and push the changes to your code repository. The interface should resemble the following:
+After updating the instructions, commit and push the changes to your code repository. Verify that your environment shows **Workspace is up to date** (as highlighted below), and the interface should resemble the following:
 
 ![instructions file](img/ss_gemini.png)
 

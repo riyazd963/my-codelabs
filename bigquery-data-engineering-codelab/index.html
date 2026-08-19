@@ -290,7 +290,7 @@ INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-wei
   ON s.cust_class = t.KTOKD AND t.MANDT = &#39;012&#39; AND t.SPRAS = &#39;E&#39;
 ORDER BY s.record ASC;
 </code></pre>
-<p><strong>Expected Result:</strong><img alt="Expected Result" src="img/fb6e0f8b71453ec1.png"></p>
+<p><strong>Expected Result:</strong><img alt="Expected Result" src="img/67c3f197dc3f66d8.png"></p>
 <h2 is-upgraded>Test 2: Orphaned Record Diagnostic (Relational Integrity Check)</h2>
 <p>This query uses <code>LEFT JOIN</code>s to identify sales records missing corresponding master data.</p>
 <p><strong>Expected Result:</strong> We intentionally omitted some master data. You should see <code>1</code> for both <code>MISSING_MATERIAL_KEYS</code> and <code>MISSING_PLANT_KEYS</code>, confirming the query successfully catches missing foreign keys. The other fields (like <code>MISSING_CUSTOMER_KEYS</code> and text keys) will show <code>0</code>, indicating complete and perfectly matched data for those dimensions.</p>

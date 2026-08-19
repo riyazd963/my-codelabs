@@ -76,13 +76,10 @@ Run the following standard BigQuery SQL commands in your Bigquery studio:
 ```sql
 -- 1. CLEANUP: Resetting the environment to a pristine state
 -----------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.input_layer.actual_sales`;
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_master.MaterialMD`;
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_master.CustomerMD`;
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_master.PlantMD`;
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_text.kna1`;
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_text.but000`;
-DROP TABLE IF EXISTS `<YOUR_PROJECT_ID>.sap_text.t077x`;
+DROP SCHEMA IF EXISTS `<YOUR_PROJECT_ID>.input_layer` CASCADE;
+DROP SCHEMA IF EXISTS `<YOUR_PROJECT_ID>.sap_master` CASCADE;
+DROP SCHEMA IF EXISTS `<YOUR_PROJECT_ID>.sap_text` CASCADE;
+DROP SCHEMA IF EXISTS `<YOUR_PROJECT_ID>.final_layer` CASCADE;
 -----------------------------------------------------------------------------------------
 ```
 
@@ -92,7 +89,7 @@ With our environment clear, we transition to the schema definition phase. Here, 
 Each schema is tailored to handle specific data grain domains—ranging from transaction facts (sales) to descriptive dimensions (material, plant, and customer master data).
 
 ### Create Datasets
-Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets. *(Note: If these datasets are already present in your project, you can skip this step).*
+Before we can construct our tables, we must initialize the logical datasets that will house them. Execute the following to create the required datasets.
 
 ```sql
 CREATE SCHEMA IF NOT EXISTS `<YOUR_PROJECT_ID>.input_layer`;

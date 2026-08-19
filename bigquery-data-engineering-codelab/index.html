@@ -254,8 +254,8 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
       </google-codelab-step>
     
       <google-codelab-step label="Verification &amp; Validation Testing" duration="0">
-        <h2 is-upgraded>Test 1: Full Inner Join Traceability</h2>
-<p>This query simulates a standard reporting view by joining the raw sales data with the master data tables. We use <code>INNER JOIN</code>s to ensure that we only extract sales records that have complete and matching master data dimensions (such as material, plant, and customer details). This provides a clean, unified view of our raw input data.</p>
+        <h2 is-upgraded>Test 1: Simulate Final Reporting View (End-to-End Traceability)</h2>
+<p>This query simulates a standard reporting view by joining the raw sales data with the master data tables. We use <code>INNER JOIN</code>s to ensure that we only extract sales records that have complete and matching master data dimensions (such as material, plant, and customer details). This provides a clean, unified view of our raw input data. <em>(Note: Because we intentionally designed the mock data to test data integrity, this query should return 99 records out of the 100 sales records).</em></p>
 <pre><code language="language-sql" class="language-sql">SELECT
   -- Transactional Data
   s.record,
@@ -291,7 +291,7 @@ INNER JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-wei
 ORDER BY s.record ASC;
 </code></pre>
 <p><strong>Expected Result:</strong><img alt="Expected Result" src="img/fb6e0f8b71453ec1.png"></p>
-<h2 is-upgraded>Test 2: Relational Integrity Check</h2>
+<h2 is-upgraded>Test 2: Orphaned Record Diagnostic (Relational Integrity Check)</h2>
 <p>This diagnostic query validates the relational integrity of our mock data. By using a <code>LEFT JOIN</code> from the sales table to all master data tables, combined with <code>COUNTIF</code> statements, it counts how many sales records are missing corresponding dimensional data.</p>
 <p><strong>Expected Result:</strong> To showcase the Data Engineering Agent&#39;s ability to detect data drift, we intentionally introduced minor inconsistencies in our mock data. Upon executing the query, you will observe a count of <code>1</code> for both <code>MISSING_MATERIAL_KEYS</code> and <code>MISSING_PLANT_KEYS</code>. This confirms that the query successfully caught the missing foreign key relationships.</p>
 <pre><code language="language-sql" class="language-sql">SELECT

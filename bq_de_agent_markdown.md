@@ -228,8 +228,8 @@ FROM UNNEST(GENERATE_ARRAY(1, 100)) AS i;
 ## Verification & Validation Testing
 
 
-### Test 1: Full Inner Join Traceability
-This query simulates a standard reporting view by joining the raw sales data with the master data tables. We use `INNER JOIN`s to ensure that we only extract sales records that have complete and matching master data dimensions (such as material, plant, and customer details). This provides a clean, unified view of our raw input data.
+### Test 1: Simulate Final Reporting View (End-to-End Traceability)
+This query simulates a standard reporting view by joining the raw sales data with the master data tables. We use `INNER JOIN`s to ensure that we only extract sales records that have complete and matching master data dimensions (such as material, plant, and customer details). This provides a clean, unified view of our raw input data. *(Note: Because we intentionally designed the mock data to test data integrity, this query should return 99 records out of the 100 sales records).*
 
 ```sql
 SELECT
@@ -271,7 +271,7 @@ ORDER BY s.record ASC;
 ![Expected Result](img/ss_test1.png)
 
 
-### Test 2: Relational Integrity Check
+### Test 2: Orphaned Record Diagnostic (Relational Integrity Check)
 This diagnostic query validates the relational integrity of our mock data. By using a `LEFT JOIN` from the sales table to all master data tables, combined with `COUNTIF` statements, it counts how many sales records are missing corresponding dimensional data. 
 
 > **Expected Result:** To showcase the Data Engineering Agent's ability to detect data drift, we intentionally introduced minor inconsistencies in our mock data. Upon executing the query, you will observe a count of `1` for both `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`. This confirms that the query successfully caught the missing foreign key relationships.

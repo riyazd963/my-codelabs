@@ -316,20 +316,20 @@ All subsequent Dataform modules must adhere strictly to the following architectu
 Navigate to the Google Cloud Console, select your project, and open the **BigQuery** console from the navigation menu.
 In the BigQuery explorer sidebar, look for the **Pipelines** dropdown menu. Click the three dots (options menu) next to Pipelines and select **Create pipeline**.
 
-<img src="img/ss1.png" alt="GCP BigQuery Navigation" width="400">
+![GCP BigQuery Navigation](img/ss1.png)
 
 When a pipeline is created, it will ask for credentials. Choose the first option ("Run with user credentials") and click **Get started**.
 
-<img src="img/credentials_selection.png" alt="Credentials Selection" width="400">
+![Credentials Selection](img/credentials_selection.png)
 
 ### Rename Pipeline and Start Agent
 Organization is key. Click on the "Untitled pipeline" text located just beside the **Run** button at the top, and give it a meaningful name, such as **DE_Agent_Pipeline**. Once renamed, click on `Ask Agent` in the top menu to initiate our AI-assisted workflow.
 
-<img src="img/ss2.png" alt="Create Pipeline Context Menu" width="400">
+![Create Pipeline Context Menu](img/ss2.png)
 
 A prompt window will open at the bottom of the screen. First, click on **Pipeline instructions**. In the resulting popup, click **Create Instructions file**, which will open a new context window for the `GEMINI.md` file.
 
-<img src="img/pipeline_instructions.png" alt="Pipeline Instructions" width="400">
+![Pipeline Instructions](img/pipeline_instructions.png)
 
 **Why GEMINI.md?**
 The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the architectural goals, and meets production-grade governance standards without needing to be manually corrected later.
@@ -359,11 +359,11 @@ No Leapfrogging: Do not generate logic for future Jobs (e.g., joins or renames) 
 
 After updating the instructions, commit and push the changes to your code repository. The interface should resemble the following:
 
-<img src="img/ss_gemini.png" alt="instructions file" width="400">
+![instructions file](img/ss_gemini.png)
 
 Returning to the previous window, you should now see a confirmation indicating `one instruction file added`. Click save to finalize the setup.
 
-<img src="img/ss_agent_instructions.png" alt="agent instructions" width="400">
+![agent instructions](img/ss_agent_instructions.png)
 
 ---
 
@@ -381,13 +381,13 @@ Formatting: Ensure the config block includes a description identifying this as t
 
 The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. The agent will explain the Objective, Context, Assumptions, File Changes, Pipeline Unit Testing, and Autocleaning Steps, and might also ask for your approval. Go through the details, understand what the agent is proposing, and approve it. **Note:** Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.
 
-<img src="img/ss5.png" alt="Module 1" width="400">
+![Module 1](img/ss5.png)
 
 Upon executing this generated pipeline, you will find that the new table `actual_sales_step1` has been successfully created under the `final_layer` dataset, maintaining a 1:1 parity with the source data.
 
 **Module 1 Complete:** We successfully achieved our goal by prompting the agent to perform a basic `SELECT *` operation and assign the appropriate Dataform configuration. We now have a solid baseline layer ready for downstream transformations!
 
-<img src="img/ss_mod1.png" alt="Module 1 Output" width="400">
+![Module 1 Output](img/ss_mod1.png)
 
 ## Module 2: Standardization & Schema Cleaning
 **Goal:** With raw data ingested, our next objective is standardizing the schema. We need to strip out confusing technical prefixes (like `_bic_`) from our column names so the data is clean and accessible for analysts.
@@ -404,13 +404,13 @@ Audit Requirement: For every renamed column, add an inline SQL comment -- Rename
 
 Observe how the agent updates the pipeline to include the schema cleaning logic. **Note:** Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.
 
-<img src="img/ss6.png" alt="Module 2 Generation" width="400">
+![Module 2 Generation](img/ss6.png)
 
 After running the pipeline, the `actual_sales_step2` table is created in the `final_layer` dataset, showcasing clean, user-friendly column names.
 
 **Module 2 Complete:** We successfully achieved our goal! By giving the agent a precise regex-style rule (strip `_bic_` etc.), it correctly parsed the raw schema and generated the exact `SELECT` statements with aliases to rename the columns. Our schema is now standardized.
 
-<img src="img/ss_mod2.png" alt="Module 2 Output" width="400">
+![Module 2 Output](img/ss_mod2.png)
 
 ## Module 3: Master Data Enrichment
 **Goal:** Raw transactional data is often cryptic (e.g., storing a Material ID but not the Material Category). In this module, our objective is to enrich our transactions by automatically joining them against descriptive master datasets (Material and Plant) so we have wider context.
@@ -428,13 +428,13 @@ Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 
 The agent will seamlessly weave the `LEFT JOIN` logic into our transformation chain. **Note:** Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.
 
-<img src="img/ss7.png" alt="Module 3 Generation" width="400">
+![Module 3 Generation](img/ss7.png)
 
 Executing this pipeline yields the `actual_sales_step3` table, now brimming with descriptive material and plant information.
 
 **Module 3 Complete:** We successfully achieved our goal. The agent intelligently analyzed the schemas, deduced the correct join keys, and constructed complex `LEFT JOIN` logic. Our pipeline now seamlessly integrates transactional facts with broad dimensional data.
 
-<img src="img/ss_mod3.png" alt="Module 3 Output" width="400">
+![Module 3 Output](img/ss_mod3.png)
 
 ## Module 4: Human-Readable Text Enrichment
 **Goal:** To complete our pipeline's final layer, our objective is to attach localization and human-readable text enrichment from our SAP text tables (such as customer names and account group descriptions). This ensures dashboards and reports are intuitive for business users.
@@ -452,7 +452,7 @@ Selection: Retrieve NAME1 from kna1, TXT30 from t077x, and text fields from but0
 
 The agent processes the final enrichment step, completing the core pipeline logic. **Note:** Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.
 
-<img src="img/ss8.png" alt="Module 4 Generation" width="400">
+![Module 4 Generation](img/ss8.png)
 
 **Module 4 Complete:** We achieved our goal! The agent correctly joined the text dimension tables, successfully navigating multiple text-specific filters (`Client = '012'`, `Language = 'E'`). Our final reporting layer is now complete and highly readable for BI consumers.
 
@@ -471,7 +471,7 @@ Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 
 The agent thoughtfully refactors the pipeline graph to incorporate this new requirement. **Note:** Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.
 
-<img src="img/ss9.png" alt="Module 5 Generation" width="400">
+![Module 5 Generation](img/ss9.png)
 
 **Module 5 Complete:** We achieved our goal! The agent intelligently refactored `actual_sales_step3.sqlx` to include the `CustomerMD` joins, successfully navigating the evolving requirements without disrupting the dependency chain.
 
@@ -491,7 +491,7 @@ Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 
 The agent applies the requested corrections, yielding a precise and compliant transformation script.
 
-<img src="img/ss10.png" alt="Module 6 Generation" width="400">
+![Module 6 Generation](img/ss10.png)
 
 **Module 6 Complete:** We achieved our goal! The agent immediately understood the natural language feedback, modified the SQL logic to keep the exact original column names, and effectively course-corrected without requiring manual SQL debugging on our part.
 

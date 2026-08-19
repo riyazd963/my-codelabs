@@ -274,7 +274,7 @@ ORDER BY s.record ASC;
 ### Test 2: Orphaned Record Diagnostic (Relational Integrity Check)
 This query uses `LEFT JOIN`s to identify sales records missing corresponding master data.
 
-> **Expected Result:** We intentionally omitted some master data. You should see `1` for both `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`, confirming the query successfully catches missing foreign keys.
+> **Expected Result:** We intentionally omitted some master data. You should see `1` for both `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`, confirming the query successfully catches missing foreign keys. The other fields (like `MISSING_CUSTOMER_KEYS` and text keys) will show `0`, indicating complete and perfectly matched data for those dimensions.
 
 ```sql
 SELECT

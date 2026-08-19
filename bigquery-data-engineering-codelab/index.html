@@ -293,7 +293,7 @@ ORDER BY s.record ASC;
 <p><strong>Expected Result:</strong><img alt="Expected Result" src="img/fb6e0f8b71453ec1.png"></p>
 <h2 is-upgraded>Test 2: Orphaned Record Diagnostic (Relational Integrity Check)</h2>
 <p>This query uses <code>LEFT JOIN</code>s to identify sales records missing corresponding master data.</p>
-<p><strong>Expected Result:</strong> We intentionally omitted some master data. You should see <code>1</code> for both <code>MISSING_MATERIAL_KEYS</code> and <code>MISSING_PLANT_KEYS</code>, confirming the query successfully catches missing foreign keys.</p>
+<p><strong>Expected Result:</strong> We intentionally omitted some master data. You should see <code>1</code> for both <code>MISSING_MATERIAL_KEYS</code> and <code>MISSING_PLANT_KEYS</code>, confirming the query successfully catches missing foreign keys. The other fields (like <code>MISSING_CUSTOMER_KEYS</code> and text keys) will show <code>0</code>, indicating complete and perfectly matched data for those dimensions.</p>
 <pre><code language="language-sql" class="language-sql">SELECT
   COUNT(*) AS total_sales_records,
   -- A count &gt; 0 indicates missing joining keys in the specified dimension!

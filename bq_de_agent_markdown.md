@@ -499,6 +499,34 @@ The agent applies the requested corrections, yielding a precise and compliant tr
 
 ---
 
+
+## Final Pipeline Validation
+**Goal:** Now that the Dataform pipeline has executed successfully and applied all the logic from Modules 1 through 6, we need to validate that the final reporting table contains the correct, enriched data.
+
+Remember back in the **Verification & Validation Testing** section, we had to write a massive, complex SQL query packed with `INNER JOIN`s just to see our sales data alongside the customer and material names?
+
+Because our Data Engineering Agent has successfully codified that logic into our pipeline, all those complex joins are now pre-calculated and stored cleanly in our `final_layer`.
+
+Let's validate the final output. Navigate back to the BigQuery SQL Workspace and run the following simple query:
+
+```sql
+SELECT 
+  record,
+  sales_document,
+  posting_date,
+  net_revenue,
+  NAME1 as customer_name,
+  TXT30 as account_group_name
+FROM `<YOUR_PROJECT_ID>.final_layer.actual_sales_step4`
+ORDER BY record ASC;
+```
+
+When you run this query, you should see exactly **99 records** returned, just like in our initial manual test! However, instead of analysts having to understand complex SAP table structures and join keys, they can now query a single, clean, standardized table. 
+
+**Congratulations!** You've proven that the Data Engineering Agent can successfully automate complex, multi-layered data enrichment tasks.
+
+---
+
 ## Alternative Prompting Method
 As you become more comfortable navigating Dataform with an AI agent, you can begin feeding it more holistic, multi-step instructions. Below is an example of an advanced, comprehensive prompt that dictates the entire pipeline architecture in one go.
 

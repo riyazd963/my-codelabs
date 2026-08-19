@@ -507,7 +507,8 @@ Remember back in the **Verification & Validation Testing** section, we had to wr
 
 Because our Data Engineering Agent has successfully codified that logic into our pipeline, all those complex joins are now pre-calculated and stored cleanly in our `final_layer`.
 
-Let's validate the final output. Navigate back to the BigQuery SQL Workspace and run the following simple query:
+### Validation 1: Record Count and Data Flattening
+Navigate to the BigQuery SQL Workspace and run the following simple query:
 
 ```sql
 SELECT 
@@ -523,7 +524,22 @@ ORDER BY record ASC;
 
 When you run this query, you should see exactly **99 records** returned, just like in our initial manual test! However, instead of analysts having to understand complex SAP table structures and join keys, they can now query a single, clean, standardized table. 
 
-**Congratulations!** You've proven that the Data Engineering Agent can successfully automate complex, multi-layered data enrichment tasks.
+### Validation 2: Data Quality & Orphaned Records Check
+We also need to verify that our relational integrity checks hold true. Since the Dataform pipeline correctly used `LEFT JOIN`s, any sales records missing master data will simply have `NULL` values in their enriched columns. We can run a quick diagnostic:
+
+```sql
+SELECT
+  COUNT(*) AS total_sales_records,
+  COUNTIF(MaterialType_MATL_TYPE IS NULL) AS MISSING_MATERIAL_DATA,
+  COUNTIF(Plant_PLANT_T IS NULL) AS MISSING_PLANT_DATA,
+  COUNTIF(NAME1 IS NULL) AS MISSING_CUSTOMER_NAME
+FROM `<YOUR_PROJECT_ID>.final_layer.actual_sales_step4`;
+```
+
+Just as we saw in our initial raw testing, this query should return `1` for missing material data, `1` for missing plant data, and `0` for missing customer names. This proves that our Dataform pipeline has perfectly preserved our data lineage while exposing the intentionally orphaned records we seeded earlier.
+
+**Congratulations!** You've proven that the Data Engineering Agent can successfully automate complex, multi-layered data enrichment tasks while maintaining strict data quality standards.
+
 
 ---
 

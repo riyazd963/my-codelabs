@@ -332,6 +332,9 @@ A prompt window will open at the bottom of the screen. First, click on **Pipelin
 **Why GEMINI.md?**
 The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the architectural goals, and meets production-grade governance standards without needing to be manually corrected later.
 
+**What's in these instructions?**
+This block acts as the strategic blueprint for the agent. It sets the agent's persona as a Lead GCP Data Engineer, maps out the technical landscape (source and target datasets), enforces Dataform best practices (such as dependency management and assertions), and establishes a strict step-by-step execution protocol so the agent doesn't rush ahead.
+
 Copy the comprehensive instruction block below into the file and save it. **Make sure to replace all instances of `<YOUR_PROJECT_ID>` with your actual Google Cloud Project ID.** These rules ensure the agent writes code that complies with our Dataform standards:
 
 ```text

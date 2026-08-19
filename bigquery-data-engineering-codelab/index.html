@@ -37,14 +37,14 @@
 <li><strong>Context-Aware Schema Operations</strong>: Intelligently analyzes existing table structures to autonomously determine optimal join keys, cast data types, and apply transformations without manual mapping.</li>
 <li><strong>Automated Data Quality &amp; Assertions</strong>: Proactively generates and enforces data quality checks (such as null-checks and uniqueness) to maintain downstream data integrity.</li>
 <li><strong>Pipeline Debugging and Course Correction</strong>: Capable of ingesting error logs and user feedback to dynamically refactor and fix broken SQL logic on the fly.</li>
-<li><strong>Architectural Governance</strong>: Autonomously enforces industry best practices—such as proper table partitioning and structured Medallion layering.</li>
+<li><strong>Architectural Governance</strong>: Autonomously enforces industry best practices—such as proper table partitioning and structured data layering.</li>
 </ul>
-<p>The primary purpose of this codelab is to <strong>demonstrate the Data Engineering Agent in action</strong>. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using the highly regarded <strong>Medallion (layered) data approach</strong>.</p>
+<p>The primary purpose of this codelab is to <strong>demonstrate the Data Engineering Agent in action</strong>. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using a robust, layered data approach.</p>
 <p>By establishing a baseline environment and then prompting the Data Engineering Agent, we will guide you step-by-step through:</p>
 <ol type="1">
 <li>Safely cleaning up and initializing our foundational data environment.</li>
 <li>Generating synthetic mock data and preparing the initial source schemas.</li>
-<li>Utilizing the Data Engineering Agent to systematically generate Dataform pipeline modules (from Bronze to Gold layers).</li>
+<li>Utilizing the Data Engineering Agent to systematically generate Dataform pipeline modules (from raw to final layers).</li>
 <li>Iteratively refining pipelines, validating integrity, and enforcing data quality through AI-assisted engineering.</li>
 </ol>
 
@@ -76,12 +76,12 @@
 <tr><td colspan="1" rowspan="1"><p><strong>Source (Raw SAP)</strong></p>
 </td><td colspan="1" rowspan="1"><p><code>input_layer</code></p>
 </td><td colspan="1" rowspan="1"><p><code>actual_sales</code></p>
-</td><td colspan="1" rowspan="1"><p>Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational Bronze layer for our pipeline.</p>
+</td><td colspan="1" rowspan="1"><p>Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational raw layer for our pipeline.</p>
 </td></tr>
-<tr><td colspan="1" rowspan="1"><p><strong>Target (Medallion)</strong></p>
+<tr><td colspan="1" rowspan="1"><p><strong>Target</strong></p>
 </td><td colspan="1" rowspan="1"><p><code>final_layer</code></p>
 </td><td colspan="1" rowspan="1"><p><code>actual_sales_step1</code>, <code>actual_sales_step2</code>, <code>actual_sales_step3</code></p>
-</td><td colspan="1" rowspan="1"><p>Holds the refined, enriched, and aggregated sales models.<br>Represents the Silver and Gold tiers for business reporting.</p>
+</td><td colspan="1" rowspan="1"><p>Holds the refined, enriched, and aggregated sales models.<br>Represents the final refined tiers for business reporting.</p>
 </td></tr>
 <tr><td colspan="1" rowspan="1"><p><strong>Master Data</strong></p>
 </td><td colspan="1" rowspan="1"><p><code>sap_master</code></p>
@@ -94,7 +94,7 @@
 </td><td colspan="1" rowspan="1"><p>Provides human-readable localization strings and text descriptions.<br>Ensures that final reports are easily understood by business users.</p>
 </td></tr>
 </table>
-<p>Take a moment to familiarize yourself with these datasets. The <code>input_layer</code> acts as our Bronze layer, capturing raw data, while the <code>final_layer</code> will serve as our refined Silver/Gold layers.</p>
+<p>Take a moment to familiarize yourself with these datasets. The <code>input_layer</code> acts as our raw ingestion layer, capturing raw data, while the <code>final_layer</code> will serve as our final refined layers.</p>
 
 
       </google-codelab-step>
@@ -338,11 +338,11 @@ LEFT JOIN `<span class="project-id-placeholder" style="color: #0f9d58; font-weig
 <p>Organization is key. Click on the &#34;Untitled pipeline&#34; text located just beside the <strong>Run</strong> button at the top, and give it a meaningful name, such as <strong>DE_Agent_Pipeline</strong>. Once renamed, click on <code>Ask Agent</code> in the top menu to initiate our AI-assisted workflow.</p>
 <p class="image-container"><img alt="Create Pipeline Context Menu" style="width: 400.00px" src="img/febdad90c968c81c.png"></p>
 <p>A prompt window will open at the bottom of the screen. First, click on <strong>Pipeline instructions</strong>. In the resulting popup, click <strong>Create Instructions file</strong>, which will open a new context window for the <code>GEMINI.md</code> file.</p>
-<p><strong>Why GEMINI.md?</strong> The <code>GEMINI.md</code> file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the &#34;big picture&#34;—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.</p>
+<p><strong>Why GEMINI.md?</strong> The <code>GEMINI.md</code> file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the &#34;big picture&#34;—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the architectural goals, and meets production-grade governance standards without needing to be manually corrected later.</p>
 <p>Copy the comprehensive instruction block below into the file and save it. <strong>Make sure to replace all instances of </strong></p>
 <p><strong><code><span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span></code></strong></p>
 <p><strong> with your actual Google Cloud Project ID.</strong> These rules ensure the agent writes code that complies with our Dataform standards:</p>
-<pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the &#34;Medallion Architecture&#34; logic .
+<pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following a structured layered logic .
 Technical Context:
 Initial Source: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales
 Target Dataset: final_layer
@@ -367,12 +367,12 @@ No Leapfrogging: Do not generate logic for future Jobs (e.g., joins or renames) 
       </google-codelab-step>
     
       <google-codelab-step label="Module 1: Raw Ingestion" duration="0">
-        <p>In this section, we begin building out our data pipeline module by module. Our first objective is to construct the foundational <strong>Bronze/Raw Ingestion Layer</strong>.</p>
+        <p>In this section, we begin building out our data pipeline module by module. Our first objective is to construct the foundational <strong>Raw Ingestion Layer</strong>.</p>
 <p>Navigate to the pipeline canvas, open the <strong>Ask Agent</strong> popup, and provide the following prompt for Module 1:</p>
 <pre><code language="language-text" class="language-text">Module 1: Raw Ingestion (Job 1)
 Instruction: Based on the common requirements provided, create the first module: actual_sales_step1.sqlx.
 Task: Select all columns and rows from the actual_sales source table.
-Formatting: Ensure the config block includes a description identifying this as the &#34;Bronze/Raw Ingestion Layer&#34;.
+Formatting: Ensure the config block includes a description identifying this as the &#34;Raw Ingestion Layer&#34;.
 </code></pre>
 <p>The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. <em>(Note: Once the agent completes execution, be sure to click </em></p>
 <p><strong><em>Apply</em></strong></p>
@@ -424,7 +424,7 @@ Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate r
       </google-codelab-step>
     
       <google-codelab-step label="Module 4: Human-Readable Text Enrichment" duration="0">
-        <p>To complete our Gold/Final layer, we must attach localization and human-readable text enrichment from our SAP text tables. This ensures dashboards and reports are intuitive for business users.</p>
+        <p>To complete our Final layer, we must attach localization and human-readable text enrichment from our SAP text tables. This ensures dashboards and reports are intuitive for business users.</p>
 <p>Use the following prompt for Module 4:</p>
 <pre><code language="language-text" class="language-text">Module 4: Human-Readable Text Enrichment (Job 4)
 Instruction: Based on the common requirements, create the final module: actual_sales_step4.sqlx.
@@ -478,7 +478,7 @@ Standards: Filter both joins by LanguageKey = &#39;E&#39; to prevent duplicate r
         <p>As you become more comfortable navigating Dataform with an AI agent, you can begin feeding it more holistic, multi-step instructions. Below is an example of an advanced, comprehensive prompt that dictates the entire pipeline architecture in one go.</p>
 <p>While single, large prompts can be highly efficient, they may require careful tuning to ensure the agent captures every nuance without hallucinations.</p>
 <h2 is-upgraded>Advanced Single Prompt Example</h2>
-<pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the &#34;Medallion Architecture&#34; logic.
+<pre><code language="language-text" class="language-text">Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows a structured layered logic.
 Technical Context:
 Initial Source: <span class="project-id-placeholder" style="color: #0f9d58; font-weight: bold;">&lt;YOUR_PROJECT_ID&gt;</span>.input_layer.actual_sales
 Target Dataset: final_layer
@@ -516,7 +516,7 @@ Performance: Add bigquery: { partitionBy: &#34;CLEAN_DATE_FIELD&#34; } to the co
 Output Format: Provide distinct code blocks. Clearly label each with its intended filename (e.g., actual_sales_step1.sqlx). 
 Think through the logic step-by-step to ensure column name collisions are avoided.
 </code></pre>
-<p>Congratulations on completing the Codelab! You are now equipped with the practical knowledge to construct and manage scalable, Medallion-style data pipelines in BigQuery using Google Cloud Dataform and AI-assisted engineering.</p>
+<p>Congratulations on completing the Codelab! You are now equipped with the practical knowledge to construct and manage scalable, structured data pipelines in BigQuery using Google Cloud Dataform and AI-assisted engineering.</p>
 
 
       </google-codelab-step>

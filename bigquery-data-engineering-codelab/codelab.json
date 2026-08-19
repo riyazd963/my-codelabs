@@ -3,11 +3,11 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2026-08-19T11:29:55+05:30",
+  "updated": "2026-08-19T11:32:02+05:30",
   "id": "bigquery-data-engineering-codelab",
   "duration": 0,
   "title": "Codelab: Demonstrating the Data Engineering Agent in BigQuery",
-  "summary": "A comprehensive, hands-on course for setting up, populating, and validating a Medallion layered architecture in Google Cloud BigQuery.",
+  "summary": "A comprehensive, hands-on course for setting up, populating, and validating a structured data pipeline architecture in Google Cloud BigQuery.",
   "source": "bq_de_agent_markdown.md",
   "theme": "",
   "status": [

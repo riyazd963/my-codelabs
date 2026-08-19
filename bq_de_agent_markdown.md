@@ -1,6 +1,6 @@
 author: Google Cloud Data Engineering Team
 id: bigquery-data-engineering-codelab
-summary: A comprehensive, hands-on course for setting up, populating, and validating a Medallion layered architecture in Google Cloud BigQuery.
+summary: A comprehensive, hands-on course for setting up, populating, and validating a structured data pipeline architecture in Google Cloud BigQuery.
 categories: Data Engineering, BigQuery, Google Cloud
 environments: Web
 status: Published
@@ -20,14 +20,14 @@ The Data Engineering Agent is designed to revolutionize how data professionals b
 * **Context-Aware Schema Operations**: Intelligently analyzes existing table structures to autonomously determine optimal join keys, cast data types, and apply transformations without manual mapping.
 * **Automated Data Quality & Assertions**: Proactively generates and enforces data quality checks (such as null-checks and uniqueness) to maintain downstream data integrity.
 * **Pipeline Debugging and Course Correction**: Capable of ingesting error logs and user feedback to dynamically refactor and fix broken SQL logic on the fly.
-* **Architectural Governance**: Autonomously enforces industry best practices—such as proper table partitioning and structured Medallion layering.
+* **Architectural Governance**: Autonomously enforces industry best practices—such as proper table partitioning and structured data layering.
 
-The primary purpose of this codelab is to **demonstrate the Data Engineering Agent in action**. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using the highly regarded **Medallion (layered) data approach**. 
+The primary purpose of this codelab is to **demonstrate the Data Engineering Agent in action**. We will use the agent to collaboratively design, set up, and validate a robust data pipeline architecture using a robust, layered data approach. 
 
 By establishing a baseline environment and then prompting the Data Engineering Agent, we will guide you step-by-step through:
 1. Safely cleaning up and initializing our foundational data environment.
 2. Generating synthetic mock data and preparing the initial source schemas.
-3. Utilizing the Data Engineering Agent to systematically generate Dataform pipeline modules (from Bronze to Gold layers).
+3. Utilizing the Data Engineering Agent to systematically generate Dataform pipeline modules (from raw to final layers).
 4. Iteratively refining pipelines, validating integrity, and enforcing data quality through AI-assisted engineering.
 
 ## What You'll Learn
@@ -47,12 +47,12 @@ Our data environment is structured into specific layers and domains as follows:
 
 | Layer / Purpose | Dataset | Table Name | Description |
 | :--- | :--- | :--- | :--- |
-| **Source (Raw SAP)** | `input_layer` | `actual_sales` | Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational Bronze layer for our pipeline. |
-| **Target (Medallion)** | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3` | Holds the refined, enriched, and aggregated sales models.<br>Represents the Silver and Gold tiers for business reporting. |
+| **Source (Raw SAP)** | `input_layer` | `actual_sales` | Contains the raw, uncleaned transactional sales data extracted from SAP.<br>Acts as the foundational raw layer for our pipeline. |
+| **Target** | `final_layer` | `actual_sales_step1`, `actual_sales_step2`, `actual_sales_step3` | Holds the refined, enriched, and aggregated sales models.<br>Represents the final refined tiers for business reporting. |
 | **Master Data** | `sap_master` | `MaterialMD`, `PlantMD`, `CustomerMD` | Stores key dimensional attributes for materials, plants, and customers.<br>Used to enrich raw transactions with contextual meaning. |
 | **Text Enrichment** | `sap_text` | `kna1`, `but000`, `t077x` | Provides human-readable localization strings and text descriptions.<br>Ensures that final reports are easily understood by business users. |
 
-Take a moment to familiarize yourself with these datasets. The `input_layer` acts as our Bronze layer, capturing raw data, while the `final_layer` will serve as our refined Silver/Gold layers.
+Take a moment to familiarize yourself with these datasets. The `input_layer` acts as our raw ingestion layer, capturing raw data, while the `final_layer` will serve as our final refined layers.
 
 ---
 
@@ -333,12 +333,12 @@ Organization is key. Click on the "Untitled pipeline" text located just beside t
 A prompt window will open at the bottom of the screen. First, click on **Pipeline instructions**. In the resulting popup, click **Create Instructions file**, which will open a new context window for the `GEMINI.md` file.
 
 **Why GEMINI.md?**
-The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the Medallion Architecture, and meets production-grade governance standards without needing to be manually corrected later.
+The `GEMINI.md` file serves as the core instruction manual for the Data Engineering Agent. Instead of writing SQL yourself, you provide the agent with the "big picture"—including architectural goals, technical context (like dataset names and source schemas), and strict Dataform best practices. By defining these global rules upfront, you ensure that every piece of code the agent generates is consistent, adheres to the architectural goals, and meets production-grade governance standards without needing to be manually corrected later.
 
 Copy the comprehensive instruction block below into the file and save it. **Make sure to replace all instances of `<YOUR_PROJECT_ID>` with your actual Google Cloud Project ID.** These rules ensure the agent writes code that complies with our Dataform standards:
 
 ```text
-Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following the "Medallion Architecture" logic .
+Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline following a structured layered logic .
 Technical Context:
 Initial Source: <YOUR_PROJECT_ID>.input_layer.actual_sales
 Target Dataset: final_layer
@@ -366,7 +366,7 @@ Returning to the previous window, you should now see a confirmation indicating `
 ---
 
 ## Module 1: Raw Ingestion
-In this section, we begin building out our data pipeline module by module. Our first objective is to construct the foundational **Bronze/Raw Ingestion Layer**.
+In this section, we begin building out our data pipeline module by module. Our first objective is to construct the foundational **Raw Ingestion Layer**.
 
 Navigate to the pipeline canvas, open the **Ask Agent** popup, and provide the following prompt for Module 1:
 
@@ -374,7 +374,7 @@ Navigate to the pipeline canvas, open the **Ask Agent** popup, and provide the f
 Module 1: Raw Ingestion (Job 1)
 Instruction: Based on the common requirements provided, create the first module: actual_sales_step1.sqlx.
 Task: Select all columns and rows from the actual_sales source table.
-Formatting: Ensure the config block includes a description identifying this as the "Bronze/Raw Ingestion Layer".
+Formatting: Ensure the config block includes a description identifying this as the "Raw Ingestion Layer".
 ```
 
 The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
@@ -429,7 +429,7 @@ Executing this pipeline yields the `actual_sales_step3` table, now brimming with
 <img src="img/ss_mod3.png" alt="Module 3 Output" width="400">
 
 ## Module 4: Human-Readable Text Enrichment
-To complete our Gold/Final layer, we must attach localization and human-readable text enrichment from our SAP text tables. This ensures dashboards and reports are intuitive for business users.
+To complete our Final layer, we must attach localization and human-readable text enrichment from our SAP text tables. This ensures dashboards and reports are intuitive for business users.
 
 Use the following prompt for Module 4:
 
@@ -490,7 +490,7 @@ While single, large prompts can be highly efficient, they may require careful tu
 
 ### Advanced Single Prompt Example
 ```text
-Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows the "Medallion Architecture" logic.
+Objective: Act as a Lead GCP Data Engineer. Develop a production-grade suite of individual Dataform .sqlx files to modernize and enrich SAP BW tables in BigQuery. The goal is to build a modular, auditable, and high-performance data pipeline that follows a structured layered logic.
 Technical Context:
 Initial Source: <YOUR_PROJECT_ID>.input_layer.actual_sales
 Target Dataset: final_layer
@@ -529,4 +529,4 @@ Output Format: Provide distinct code blocks. Clearly label each with its intende
 Think through the logic step-by-step to ensure column name collisions are avoided.
 ```
 
-Congratulations on completing the Codelab! You are now equipped with the practical knowledge to construct and manage scalable, Medallion-style data pipelines in BigQuery using Google Cloud Dataform and AI-assisted engineering.
+Congratulations on completing the Codelab! You are now equipped with the practical knowledge to construct and manage scalable, structured data pipelines in BigQuery using Google Cloud Dataform and AI-assisted engineering.

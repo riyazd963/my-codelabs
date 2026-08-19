@@ -377,7 +377,7 @@ Task: Select all columns and rows from the actual_sales source table.
 Formatting: Ensure the config block includes a description identifying this as the "Raw Ingestion Layer".
 ```
 
-The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
+The agent will process your prompt and intelligently generate the corresponding SQLX pipeline code. The agent will explain the Objective, Context, Assumptions, File Changes, Pipeline Unit Testing, and Autocleaning Steps, and might also ask for your approval. Go through the details, understand what the agent is proposing, and approve it. *(Note: Once the agent completes execution, be sure to click **Apply** to save the changes, otherwise they will be lost.)*
 
 <img src="img/ss5.png" alt="Module 1" width="400">
 

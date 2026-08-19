@@ -33,7 +33,6 @@ By establishing a baseline environment and then prompting the Data Engineering A
 ## What You'll Learn
 * **AI-Assisted Data Engineering**: How to effectively interact with the Data Engineering Agent using modular prompts to generate complex data pipelines.
 * **Agent Capabilities**: Discover what the Data Engineering Agent can do—from automated schema transformations and data standardization to intelligent table joins and logic corrections.
-* **Medallion Architecture**: Using the Data Engineering Agent to build scalable Bronze, Silver, and Gold data layers in BigQuery.
 * **Production Dataform Frameworks**: Implementing the Data Engineering Agent alongside Google Cloud Dataform to build auditable, dependency-driven data workflows.
 * **Prompt Engineering for DE**: Best practices for structuring prompts to ensure the agent writes code that complies with strict data governance and relational standards.
 

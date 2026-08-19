@@ -272,9 +272,9 @@ ORDER BY s.record ASC;
 
 
 ### Test 2: Orphaned Record Diagnostic (Relational Integrity Check)
-This diagnostic query validates the relational integrity of our mock data. By using a `LEFT JOIN` from the sales table to all master data tables, combined with `COUNTIF` statements, it counts how many sales records are missing corresponding dimensional data. 
+This query uses `LEFT JOIN`s to identify sales records missing corresponding master data.
 
-> **Expected Result:** To showcase the Data Engineering Agent's ability to detect data drift, we intentionally introduced minor inconsistencies in our mock data. Upon executing the query, you will observe a count of `1` for both `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`. This confirms that the query successfully caught the missing foreign key relationships.
+> **Expected Result:** We intentionally omitted some master data. You should see `1` for both `MISSING_MATERIAL_KEYS` and `MISSING_PLANT_KEYS`, confirming the query successfully catches missing foreign keys.
 
 ```sql
 SELECT

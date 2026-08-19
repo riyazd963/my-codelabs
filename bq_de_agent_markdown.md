@@ -513,9 +513,9 @@ Navigate to the BigQuery SQL Workspace and run the following simple query:
 ```sql
 SELECT 
   record,
-  sales_document,
-  posting_date,
-  net_revenue,
+  doc_number AS sales_document,
+  calday AS posting_date,
+  zs_netrev AS net_revenue,
   NAME1 as customer_name,
   TXT30 as account_group_name
 FROM `<YOUR_PROJECT_ID>.final_layer.actual_sales_step4`

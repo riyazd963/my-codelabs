@@ -475,6 +475,8 @@ The agent thoughtfully refactors the pipeline graph to incorporate this new requ
 
 **Module 5 Complete:** We achieved our goal! The agent intelligently refactored `actual_sales_step3.sqlx` to include the `CustomerMD` joins, successfully navigating the evolving requirements without disrupting the dependency chain.
 
+![Module 5 Output](img/ss_mod5.png)
+
 ## Module 6: Course Corrections
 **Goal:** AI agents, much like human engineers, occasionally need specific constraints reiterated. Our objective is to demonstrate the agent's debug and correction capabilities by instructing it to fix an inappropriate column rename, proving it can course-correct based on natural language feedback.
 

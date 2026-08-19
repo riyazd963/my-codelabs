@@ -366,7 +366,7 @@ Returning to the previous window, you should now see a confirmation indicating `
 ---
 
 ## Module 1: Raw Ingestion
-In this section, we begin building out our data pipeline module by module. Our first objective is to construct the foundational **Raw Ingestion Layer**.
+**Goal:** In this section, our objective is to construct the foundational **Raw Ingestion Layer**. We want to simply ingest the raw transactional data from our source table into our pipeline without any complex transformations, establishing a reliable baseline.
 
 Navigate to the pipeline canvas, open the **Ask Agent** popup, and provide the following prompt for Module 1:
 
@@ -383,10 +383,12 @@ The agent will process your prompt and intelligently generate the corresponding 
 
 Upon executing this generated pipeline, you will find that the new table `actual_sales_step1` has been successfully created under the `final_layer` dataset, maintaining a 1:1 parity with the source data.
 
+**Module 1 Complete:** We successfully achieved our goal by prompting the agent to perform a basic `SELECT *` operation and assign the appropriate Dataform configuration. We now have a solid baseline layer ready for downstream transformations!
+
 <img src="img/ss_mod1.png" alt="Module 1 Output" width="400">
 
 ## Module 2: Standardization & Schema Cleaning
-With raw data ingested, the next logical step in our architecture is standardizing the schema. This involves stripping out technical prefixes to make the data more accessible to analysts.
+**Goal:** With raw data ingested, our next objective is standardizing the schema. We need to strip out confusing technical prefixes (like `_bic_`) from our column names so the data is clean and accessible for analysts.
 
 Provide the following prompt to the agent for Module 2:
 
@@ -404,10 +406,12 @@ Observe how the agent updates the pipeline to include the schema cleaning logic.
 
 After running the pipeline, the `actual_sales_step2` table is created in the `final_layer` dataset, showcasing clean, user-friendly column names.
 
+**Module 2 Complete:** We successfully achieved our goal! By giving the agent a precise regex-style rule (strip `_bic_` etc.), it correctly parsed the raw schema and generated the exact `SELECT` statements with aliases to rename the columns. Our schema is now standardized.
+
 <img src="img/ss_mod2.png" alt="Module 2 Output" width="400">
 
 ## Module 3: Master Data Enrichment
-Raw transactional data is often cryptic (e.g., storing a Material ID but not the Material Name). In this module, we enrich our transactions by joining them against descriptive master datasets.
+**Goal:** Raw transactional data is often cryptic (e.g., storing a Material ID but not the Material Category). In this module, our objective is to enrich our transactions by automatically joining them against descriptive master datasets (Material and Plant) so we have wider context.
 
 Provide the following prompt to build Module 3:
 
@@ -426,10 +430,12 @@ The agent will seamlessly weave the `LEFT JOIN` logic into our transformation ch
 
 Executing this pipeline yields the `actual_sales_step3` table, now brimming with descriptive material and plant information.
 
+**Module 3 Complete:** We successfully achieved our goal. The agent intelligently analyzed the schemas, deduced the correct join keys, and constructed complex `LEFT JOIN` logic. Our pipeline now seamlessly integrates transactional facts with broad dimensional data.
+
 <img src="img/ss_mod3.png" alt="Module 3 Output" width="400">
 
 ## Module 4: Human-Readable Text Enrichment
-To complete our Final layer, we must attach localization and human-readable text enrichment from our SAP text tables. This ensures dashboards and reports are intuitive for business users.
+**Goal:** To complete our pipeline's final layer, our objective is to attach localization and human-readable text enrichment from our SAP text tables (such as customer names and account group descriptions). This ensures dashboards and reports are intuitive for business users.
 
 Use the following prompt for Module 4:
 
@@ -446,8 +452,10 @@ The agent processes the final enrichment step, completing the core pipeline logi
 
 <img src="img/ss8.png" alt="Module 4 Generation" width="400">
 
+**Module 4 Complete:** We achieved our goal! The agent correctly joined the text dimension tables, successfully navigating multiple text-specific filters (`Client = '012'`, `Language = 'E'`). Our final reporting layer is now complete and highly readable for BI consumers.
+
 ## Module 5: Extending Enrichment Iteratively
-In real-world scenarios, requirements evolve, and you may need to amend previous modules. Here, we demonstrate how to request an enhancement to an existing step.
+**Goal:** In real-world scenarios, requirements evolve, and you often need to amend previous modules. Our objective here is to demonstrate how to seamlessly request an enhancement (adding Customer Master Data) to an existing step (Module 3) without breaking the pipeline.
 
 Provide the following prompt to enhance Module 3 with customer data:
 
@@ -463,8 +471,10 @@ The agent thoughtfully refactors the pipeline graph to incorporate this new requ
 
 <img src="img/ss9.png" alt="Module 5 Generation" width="400">
 
+**Module 5 Complete:** We achieved our goal! The agent intelligently refactored `actual_sales_step3.sqlx` to include the `CustomerMD` joins, successfully navigating the evolving requirements without disrupting the dependency chain.
+
 ## Module 6: Course Corrections
-AI agents, much like human engineers, occasionally need specific constraints reiterated. If a column is inappropriately renamed, you can effortlessly instruct the agent to correct its behavior.
+**Goal:** AI agents, much like human engineers, occasionally need specific constraints reiterated. Our objective is to demonstrate the agent's debug and correction capabilities by instructing it to fix an inappropriate column rename, proving it can course-correct based on natural language feedback.
 
 Provide the following correction prompt:
 
@@ -480,6 +490,8 @@ Standards: Filter both joins by LanguageKey = 'E' to prevent duplicate records.
 The agent applies the requested corrections, yielding a precise and compliant transformation script.
 
 <img src="img/ss10.png" alt="Module 6 Generation" width="400">
+
+**Module 6 Complete:** We achieved our goal! The agent immediately understood the natural language feedback, modified the SQL logic to keep the exact original column names, and effectively course-corrected without requiring manual SQL debugging on our part.
 
 ---
 
